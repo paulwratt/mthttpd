@@ -331,6 +331,7 @@ static void
 re_open_logfile( void )
     {
     FILE* logfp;
+    int retchmod;
 
     if ( no_log || hs == (httpd_server*) 0 )
 	return;
@@ -340,7 +341,8 @@ re_open_logfile( void )
 	{
 	syslog( LOG_NOTICE, "re-opening logfile" );
 	logfp = fopen( logfile, "a" );
-	if ( logfp == (FILE*) 0 )
+        retchmod = chmod( logfile, S_IRUSR|S_IWUSR );
+	if ( logfp == (FILE*) 0 || retchmod != 0 )
 	    {
 	    syslog( LOG_CRIT, "re-opening %.80s - %m", logfile );
 	    return;
@@ -360,6 +362,7 @@ main( int argc, char** argv )
     gid_t gid = 32767;
     char cwd[MAXPATHLEN+1];
     FILE* logfp;
+    int retchmod;
     int num_ready;
     int cnum;
     connecttab* c;
@@ -429,7 +432,8 @@ main( int argc, char** argv )
 	else
 	    {
 	    logfp = fopen( logfile, "a" );
-	    if ( logfp == (FILE*) 0 )
+            retchmod = chmod( logfile, S_IRUSR|S_IWUSR );
+            if ( logfp == (FILE*) 0 || retchmod != 0 )
 		{
 		syslog( LOG_CRIT, "%.80s - %m", logfile );
 		perror( logfile );
