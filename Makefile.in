@@ -30,19 +30,19 @@
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 # Pathname of directory to install the binary.
-BINDIR = @sbindir@
+BINDIR ?= @sbindir@
 # Pathname of directory to install the man page.
-MANDIR = @mandir@
+MANDIR ?= @mandir@
 # Pathname of directory to install the CGI programs.
-WEBDIR = $(prefix)/www
+WEBDIR ?= $(prefix)/www
 
 # CONFIGURE: The group that the web directory belongs to.  This is so that
 # the makeweb program can be installed set-group-id to that group, and make
 # subdirectories.  If you're not going to use makeweb, ignore this.
-WEBGROUP =	www-data
+WEBGROUP ?=	www-data
 
 # CONFIGURE: Directory for CGI executables.
-CGIBINDIR =	$(WEBDIR)/cgi-bin
+CGIBINDIR ?=	$(WEBDIR)/cgi-bin
 
 # You shouldn't need to edit anything below here.
 
@@ -106,7 +106,7 @@ subdirs:
 	) ; done
 
 
-install:	installthis install-man installsubdirs
+install:	installthis install-man install-www installsubdirs
 
 installthis:
 	-mkdir -p $(DESTDIR)$(BINDIR)
@@ -115,6 +115,26 @@ installthis:
 install-man:
 	-mkdir -p $(DESTDIR)$(MANDIR)/man8
 	$(INSTALL) -m 444 -o bin -g bin mthttpd.8 $(DESTDIR)$(MANDIR)/man8
+
+install-www:
+        -mkdir -p $(DESTDIR)$(CGIBINDIR)
+        $(INSTALL) -m 644 -o bin -g bin www/index.html $(DESTDIR)$(WEBDIR)
+        $(INSTALL) -m 755 -o bin -g bin www/phpinfo.php $(DESTDIR)$(WEBDIR)
+        $(INSTALL) -m 755 -o bin -g bin www/test.php $(DESTDIR)$(WEBDIR)
+        $(INSTALL) -m 755 -o bin -g bin www/cgi-bin/printenv $(DESTDIR)$(CGIBINDIR)
+        $(INSTALL) -m 755 -o bin -g bin www/cgi-bin/phpinfo.cgi $(DESTDIR)$(CGIBINDIR)
+        $(INSTALL) -m 755 -o bin -g bin www/cgi-bin/php.cgi $(DESTDIR)$(CGIBINDIR)
+
+install-tools:
+	cd extras ; \
+        pwd ; \
+        $(MAKE) $(MFLAGS) \
+	    WEBDIR=$(WEBDIR) \
+	    CGIBINDIR=$(CGIBINDIR) \
+	    MANDIR=$(MANDIR) \
+	    WEBGROUP=$(WEBGROUP) \
+	    install
+
 
 installsubdirs:
 	for i in $(SUBDIRS) ; do ( \
@@ -158,7 +178,7 @@ tar:
 	  mkdir $$name ; \
 	  tar cf - `cat FILES` | ( cd $$name ; tar xfBp - ) ; \
 	  chmod 644 $$name/Makefile.in $$name/config.h $$name/mime_encodings.txt $$name/mime_types.txt ; \
-	  chmod 755 $$name/cgi-bin $$name/cgi-src $$name/contrib $$name/contrib/redhat-rpm $$name/extras $$name/scripts ; \
+	  chmod 755 $$name/www/cgi-bin $$name/cgi-src $$name/contrib $$name/contrib/redhat-rpm $$name/extras $$name/scripts ; \
 	  tar cf $$name.tar $$name ; \
 	  rm -rf $$name ; \
 	  gzip $$name.tar
