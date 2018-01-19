@@ -1,0 +1,620 @@
+libhttpd.c:557:    httpd_realloc_str( &hc->response, &hc->maxresponse, hc->responselen + len );
+libhttpd.c:558:    (void) memmove( &(hc->response[hc->responselen]), str, len );
+libhttpd.c:559:    hc->responselen += len;
+libhttpd.c:568:	httpd_clear_ndelay( hc->conn_fd );
+libhttpd.c:570:    if ( hc->responselen > 0 )
+libhttpd.c:572:	(void) httpd_write_fully( hc->conn_fd, hc->response, hc->responselen );
+libhttpd.c:573:	hc->responselen = 0;
+libhttpd.c:623:    hc->status = status;
+libhttpd.c:624:    hc->bytes_to_send = length;
+libhttpd.c:625:    if ( hc->mime_flag )
+libhttpd.c:627:	if ( status == 200 && hc->got_range &&
+libhttpd.c:628:	     ( hc->last_byte_index >= hc->first_byte_index ) &&
+libhttpd.c:629:	     ( ( hc->last_byte_index != length - 1 ) ||
+libhttpd.c:630:	       ( hc->first_byte_index != 0 ) ) &&
+libhttpd.c:631:	     ( hc->range_if == (time_t) -1 ||
+libhttpd.c:632:	       hc->range_if == hc->sb.st_mtime ) )
+libhttpd.c:635:	    hc->status = status = 206;
+libhttpd.c:641:	    hc->got_range = 0;
+libhttpd.c:650:	    fixed_type, sizeof(fixed_type), type, hc->hs->charset );
+libhttpd.c:653:	    hc->protocol, status, title, EXPOSED_SERVER_SOFTWARE, fixed_type,
+libhttpd.c:673:		(long long) hc->first_byte_index,
+libhttpd.c:674:		(long long) hc->last_byte_index,
+libhttpd.c:676:		(long long) ( hc->last_byte_index - hc->first_byte_index + 1 ) );
+libhttpd.c:685:	if ( hc->hs->p3p[0] != '\0' )
+libhttpd.c:687:	    (void) my_snprintf( buf, sizeof(buf), "P3P: %s\015\012", hc->hs->p3p );
+libhttpd.c:690:	if ( hc->hs->max_age >= 0 )
+libhttpd.c:692:	    expires = now + hc->hs->max_age;
+libhttpd.c:697:		hc->hs->max_age, expbuf );
+libhttpd.c:765:    if ( match( "**MSIE**", hc->useragent ) )
+libhttpd.c:836:    if ( hc->hs->vhost && hc->hostdir[0] != '\0' )
+libhttpd.c:839:	    "%s/%s/err%d.html", hc->hostdir, ERR_DIR, status );
+libhttpd.c:906:    httpd_send_err( hc, 401, err401title, header, err401form, hc->encodedurl );
+libhttpd.c:910:    if ( hc->method == METHOD_POST )
+libhttpd.c:911:	hc->should_linger = 1;
+libhttpd.c:1000:    if ( hc->hs->global_passwd )
+libhttpd.c:1003:	if ( hc->hs->vhost && hc->hostdir[0] != '\0' )
+libhttpd.c:1004:	    topdir = hc->hostdir;
+libhttpd.c:1052:    if ( hc->authorization[0] == '\0' ||
+libhttpd.c:1053:	 strncmp( hc->authorization, "Basic ", 6 ) != 0 )
+libhttpd.c:1062:	&(hc->authorization[6]), (unsigned char*) authinfo,
+libhttpd.c:1090:		&hc->remoteuser, &hc->maxremoteuser, strlen( authinfo ) );
+libhttpd.c:1091:	    (void) strcpy( hc->remoteuser, authinfo );
+libhttpd.c:1109:	    httpd_ntoa( &hc->client_addr ), authpath );
+libhttpd.c:1113:	    hc->encodedurl );
+libhttpd.c:1139:		    &hc->remoteuser, &hc->maxremoteuser, strlen( line ) );
+libhttpd.c:1140:		(void) strcpy( hc->remoteuser, line );
+libhttpd.c:1179:    if ( hc->query[0] != '\0')
+libhttpd.c:1181:	char* cp = strchr( hc->encodedurl, '?' );
+libhttpd.c:1186:	    strlen( hc->encodedurl ) + 2 + strlen( hc->query ) );
+libhttpd.c:1188:	    "%s/?%s", hc->encodedurl, hc->query );
+libhttpd.c:1193:	    &location, &maxlocation, strlen( hc->encodedurl ) + 1 );
+libhttpd.c:1195:	    "%s/", hc->encodedurl );
+libhttpd.c:1288:    len = strlen( hc->expnfilename ) - 1;
+libhttpd.c:1290:    (void) strcpy( temp, &hc->expnfilename[1] );
+libhttpd.c:1292:	&hc->expnfilename, &hc->maxexpnfilename, strlen( prefix ) + 1 + len );
+libhttpd.c:1293:    (void) strcpy( hc->expnfilename, prefix );
+libhttpd.c:1295:	(void) strcat( hc->expnfilename, "/" );
+libhttpd.c:1296:    (void) strcat( hc->expnfilename, temp );
+libhttpd.c:1315:    httpd_realloc_str( &temp, &maxtemp, strlen( hc->expnfilename ) - 1 );
+libhttpd.c:1316:    (void) strcpy( temp, &hc->expnfilename[1] );
+libhttpd.c:1330:	&hc->altdir, &hc->maxaltdir,
+libhttpd.c:1332:    (void) strcpy( hc->altdir, pw->pw_dir );
+libhttpd.c:1335:	(void) strcat( hc->altdir, "/" );
+libhttpd.c:1336:	(void) strcat( hc->altdir, postfix );
+libhttpd.c:1338:    alt = expand_symlinks( hc->altdir, &rest, 0, 1 );
+libhttpd.c:1341:    httpd_realloc_str( &hc->altdir, &hc->maxaltdir, strlen( alt ) );
+libhttpd.c:1342:    (void) strcpy( hc->altdir, alt );
+libhttpd.c:1346:	&hc->expnfilename, &hc->maxexpnfilename,
+libhttpd.c:1347:	strlen( hc->altdir ) + 1 + strlen( cp ) );
+libhttpd.c:1348:    (void) my_snprintf( hc->expnfilename, hc->maxexpnfilename,
+libhttpd.c:1349:	"%s/%s", hc->altdir, cp );
+libhttpd.c:1352:    hc->tildemapped = 1;
+libhttpd.c:1375:    if ( hc->reqhost[0] != '\0' )
+libhttpd.c:1376:	hc->hostname = hc->reqhost;
+libhttpd.c:1377:    else if ( hc->hdrhost[0] != '\0' )
+libhttpd.c:1378:	hc->hostname = hc->hdrhost;
+libhttpd.c:1382:	if ( getsockname( hc->conn_fd, &sa.sa, &sz ) < 0 )
+libhttpd.c:1387:	hc->hostname = httpd_ntoa( &sa );
+libhttpd.c:1390:    for ( cp1 = hc->hostname; *cp1 != '\0'; ++cp1 )
+libhttpd.c:1394:    if ( hc->tildemapped )
+libhttpd.c:1400:	&hc->hostdir, &hc->maxhostdir,
+libhttpd.c:1401:	strlen( hc->hostname ) + 2 * VHOST_DIRLEVELS );
+libhttpd.c:1402:    if ( strncmp( hc->hostname, "www.", 4 ) == 0 )
+libhttpd.c:1403:	cp1 = &hc->hostname[4];
+libhttpd.c:1405:	cp1 = hc->hostname;
+libhttpd.c:1406:    for ( cp2 = hc->hostdir, i = 0; i < VHOST_DIRLEVELS; ++i )
+libhttpd.c:1424:    (void) strcpy( cp2, hc->hostname );
+libhttpd.c:1426:    httpd_realloc_str( &hc->hostdir, &hc->maxhostdir, strlen( hc->hostname ) );
+libhttpd.c:1427:    (void) strcpy( hc->hostdir, hc->hostname );
+libhttpd.c:1431:    len = strlen( hc->expnfilename );
+libhttpd.c:1433:    (void) strcpy( tempfilename, hc->expnfilename );
+libhttpd.c:1435:	&hc->expnfilename, &hc->maxexpnfilename,
+libhttpd.c:1436:	strlen( hc->hostdir ) + 1 + len );
+libhttpd.c:1437:    (void) strcpy( hc->expnfilename, hc->hostdir );
+libhttpd.c:1438:    (void) strcat( hc->expnfilename, "/" );
+libhttpd.c:1439:    (void) strcat( hc->expnfilename, tempfilename );
+libhttpd.c:1677:    if ( ! hc->initialized )
+libhttpd.c:1679:	hc->read_size = 0;
+libhttpd.c:1680:	httpd_realloc_str( &hc->read_buf, &hc->read_size, 500 );
+libhttpd.c:1681:	hc->maxdecodedurl =
+libhttpd.c:1682:	    hc->maxorigfilename = hc->maxexpnfilename = hc->maxencodings =
+libhttpd.c:1683:	    hc->maxpathinfo = hc->maxquery = hc->maxaccept =
+libhttpd.c:1684:	    hc->maxaccepte = hc->maxreqhost = hc->maxhostdir =
+libhttpd.c:1685:	    hc->maxremoteuser = hc->maxresponse = 0;
+libhttpd.c:1687:	hc->maxaltdir = 0;
+libhttpd.c:1689:	httpd_realloc_str( &hc->decodedurl, &hc->maxdecodedurl, 1 );
+libhttpd.c:1690:	httpd_realloc_str( &hc->origfilename, &hc->maxorigfilename, 1 );
+libhttpd.c:1691:	httpd_realloc_str( &hc->expnfilename, &hc->maxexpnfilename, 0 );
+libhttpd.c:1692:	httpd_realloc_str( &hc->encodings, &hc->maxencodings, 0 );
+libhttpd.c:1693:	httpd_realloc_str( &hc->pathinfo, &hc->maxpathinfo, 0 );
+libhttpd.c:1694:	httpd_realloc_str( &hc->query, &hc->maxquery, 0 );
+libhttpd.c:1695:	httpd_realloc_str( &hc->accept, &hc->maxaccept, 0 );
+libhttpd.c:1696:	httpd_realloc_str( &hc->accepte, &hc->maxaccepte, 0 );
+libhttpd.c:1697:	httpd_realloc_str( &hc->reqhost, &hc->maxreqhost, 0 );
+libhttpd.c:1698:	httpd_realloc_str( &hc->hostdir, &hc->maxhostdir, 0 );
+libhttpd.c:1699:	httpd_realloc_str( &hc->remoteuser, &hc->maxremoteuser, 0 );
+libhttpd.c:1700:	httpd_realloc_str( &hc->response, &hc->maxresponse, 0 );
+libhttpd.c:1702:	httpd_realloc_str( &hc->altdir, &hc->maxaltdir, 0 );
+libhttpd.c:1704:	hc->initialized = 1;
+libhttpd.c:1709:    hc->conn_fd = accept( listen_fd, &sa.sa, &sz );
+libhttpd.c:1710:    if ( hc->conn_fd < 0 )
+libhttpd.c:1724:	close( hc->conn_fd );
+libhttpd.c:1725:	hc->conn_fd = -1;
+libhttpd.c:1728:    (void) fcntl( hc->conn_fd, F_SETFD, 1 );
+libhttpd.c:1729:    hc->hs = hs;
+libhttpd.c:1730:    (void) memset( &hc->client_addr, 0, sizeof(hc->client_addr) );
+libhttpd.c:1731:    (void) memmove( &hc->client_addr, &sa, sockaddr_len( &sa ) );
+libhttpd.c:1732:    hc->read_idx = 0;
+libhttpd.c:1733:    hc->checked_idx = 0;
+libhttpd.c:1734:    hc->checked_state = CHST_FIRSTWORD;
+libhttpd.c:1735:    hc->method = METHOD_UNKNOWN;
+libhttpd.c:1736:    hc->status = 0;
+libhttpd.c:1737:    hc->bytes_to_send = 0;
+libhttpd.c:1738:    hc->bytes_sent = 0;
+libhttpd.c:1739:    hc->encodedurl = "";
+libhttpd.c:1740:    hc->decodedurl[0] = '\0';
+libhttpd.c:1741:    hc->protocol = "UNKNOWN";
+libhttpd.c:1742:    hc->origfilename[0] = '\0';
+libhttpd.c:1743:    hc->expnfilename[0] = '\0';
+libhttpd.c:1744:    hc->encodings[0] = '\0';
+libhttpd.c:1745:    hc->pathinfo[0] = '\0';
+libhttpd.c:1746:    hc->query[0] = '\0';
+libhttpd.c:1747:    hc->referrer = "";
+libhttpd.c:1748:    hc->useragent = "";
+libhttpd.c:1749:    hc->accept[0] = '\0';
+libhttpd.c:1750:    hc->accepte[0] = '\0';
+libhttpd.c:1751:    hc->acceptl = "";
+libhttpd.c:1752:    hc->cookie = "";
+libhttpd.c:1753:    hc->contenttype = "";
+libhttpd.c:1754:    hc->reqhost[0] = '\0';
+libhttpd.c:1755:    hc->hdrhost = "";
+libhttpd.c:1756:    hc->hostdir[0] = '\0';
+libhttpd.c:1757:    hc->authorization = "";
+libhttpd.c:1758:    hc->forwardedfor = "";
+libhttpd.c:1759:    hc->remoteuser[0] = '\0';
+libhttpd.c:1760:    hc->response[0] = '\0';
+libhttpd.c:1762:    hc->altdir[0] = '\0';
+libhttpd.c:1764:    hc->responselen = 0;
+libhttpd.c:1765:    hc->if_modified_since = (time_t) -1;
+libhttpd.c:1766:    hc->range_if = (time_t) -1;
+libhttpd.c:1767:    hc->contentlength = -1;
+libhttpd.c:1768:    hc->type = "";
+libhttpd.c:1769:    hc->hostname = (char*) 0;
+libhttpd.c:1770:    hc->mime_flag = 1;
+libhttpd.c:1771:    hc->one_one = 0;
+libhttpd.c:1772:    hc->got_range = 0;
+libhttpd.c:1773:    hc->tildemapped = 0;
+libhttpd.c:1774:    hc->first_byte_index = 0;
+libhttpd.c:1775:    hc->last_byte_index = -1;
+libhttpd.c:1776:    hc->keep_alive = 0;
+libhttpd.c:1777:    hc->should_linger = 0;
+libhttpd.c:1778:    hc->file_address = (char*) 0;
+libhttpd.c:1783:/* Checks hc->read_buf to see whether a complete request has been read so far;
+libhttpd.c:1787:** hc->read_idx is how much has been read in; hc->checked_idx is how much we
+libhttpd.c:1788:** have checked so far; and hc->checked_state is the current state of the
+libhttpd.c:1796:    for ( ; hc->checked_idx < hc->read_idx; ++hc->checked_idx )
+libhttpd.c:1798:	c = hc->read_buf[hc->checked_idx];
+libhttpd.c:1799:	switch ( hc->checked_state )
+libhttpd.c:1805:		hc->checked_state = CHST_FIRSTWS;
+libhttpd.c:1808:		hc->checked_state = CHST_BOGUS;
+libhttpd.c:1818:		hc->checked_state = CHST_BOGUS;
+libhttpd.c:1821:		hc->checked_state = CHST_SECONDWORD;
+libhttpd.c:1829:		hc->checked_state = CHST_SECONDWS;
+libhttpd.c:1842:		hc->checked_state = CHST_BOGUS;
+libhttpd.c:1845:		hc->checked_state = CHST_THIRDWORD;
+libhttpd.c:1853:		hc->checked_state = CHST_THIRDWS;
+libhttpd.c:1856:		hc->checked_state = CHST_LF;
+libhttpd.c:1859:		hc->checked_state = CHST_CR;
+libhttpd.c:1869:		hc->checked_state = CHST_LF;
+libhttpd.c:1872:		hc->checked_state = CHST_CR;
+libhttpd.c:1875:		hc->checked_state = CHST_BOGUS;
+libhttpd.c:1883:		hc->checked_state = CHST_LF;
+libhttpd.c:1886:		hc->checked_state = CHST_CR;
+libhttpd.c:1897:		hc->checked_state = CHST_CR;
+libhttpd.c:1900:		hc->checked_state = CHST_LINE;
+libhttpd.c:1908:		hc->checked_state = CHST_CRLF;
+libhttpd.c:1914:		hc->checked_state = CHST_LINE;
+libhttpd.c:1925:		hc->checked_state = CHST_CRLFCR;
+libhttpd.c:1928:		hc->checked_state = CHST_LINE;
+libhttpd.c:1939:		hc->checked_state = CHST_LINE;
+libhttpd.c:1963:    hc->checked_idx = 0;	/* reset */
+libhttpd.c:1977:	hc->mime_flag = 0;
+libhttpd.c:1989:		hc->one_one = 1;
+libhttpd.c:1992:    hc->protocol = protocol;
+libhttpd.c:1997:	if ( ! hc->one_one )
+libhttpd.c:2015:	httpd_realloc_str( &hc->reqhost, &hc->maxreqhost, strlen( reqhost ) );
+libhttpd.c:2016:	(void) strcpy( hc->reqhost, reqhost );
+libhttpd.c:2027:	hc->method = METHOD_GET;
+libhttpd.c:2029:	hc->method = METHOD_HEAD;
+libhttpd.c:2031:	hc->method = METHOD_POST;
+libhttpd.c:2038:    hc->encodedurl = url;
+libhttpd.c:2040:	&hc->decodedurl, &hc->maxdecodedurl, strlen( hc->encodedurl ) );
+libhttpd.c:2041:    strdecode( hc->decodedurl, hc->encodedurl );
+libhttpd.c:2044:	&hc->origfilename, &hc->maxorigfilename, strlen( hc->decodedurl ) );
+libhttpd.c:2045:    (void) strcpy( hc->origfilename, &hc->decodedurl[1] );
+libhttpd.c:2047:    if ( hc->origfilename[0] == '\0' )
+libhttpd.c:2048:	(void) strcpy( hc->origfilename, "." );
+libhttpd.c:2051:    cp = strchr( hc->encodedurl, '?' );
+libhttpd.c:2055:	httpd_realloc_str( &hc->query, &hc->maxquery, strlen( cp ) );
+libhttpd.c:2056:	(void) strcpy( hc->query, cp );
+libhttpd.c:2058:	cp = strchr( hc->origfilename, '?' );
+libhttpd.c:2063:    de_dotdot( hc->origfilename );
+libhttpd.c:2064:    if ( hc->origfilename[0] == '/' ||
+libhttpd.c:2065:	 ( hc->origfilename[0] == '.' && hc->origfilename[1] == '.' &&
+libhttpd.c:2066:	   ( hc->origfilename[2] == '\0' || hc->origfilename[2] == '/' ) ) )
+libhttpd.c:2072:    if ( hc->mime_flag )
+libhttpd.c:2083:		hc->referrer = cp;
+libhttpd.c:2089:		hc->referrer = cp;
+libhttpd.c:2095:		hc->useragent = cp;
+libhttpd.c:2101:		hc->hdrhost = cp;
+libhttpd.c:2102:		cp = strchr( hc->hdrhost, ':' );
+libhttpd.c:2105:		if ( strchr( hc->hdrhost, '/' ) != (char*) 0 || hc->hdrhost[0] == '.' )
+libhttpd.c:2115:		if ( hc->accept[0] != '\0' )
+libhttpd.c:2117:		    if ( strlen( hc->accept ) > 5000 )
+libhttpd.c:2121:			    httpd_ntoa( &hc->client_addr ) );
+libhttpd.c:2125:			&hc->accept, &hc->maxaccept,
+libhttpd.c:2126:			strlen( hc->accept ) + 2 + strlen( cp ) );
+libhttpd.c:2127:		    (void) strcat( hc->accept, ", " );
+libhttpd.c:2131:			&hc->accept, &hc->maxaccept, strlen( cp ) );
+libhttpd.c:2132:		(void) strcat( hc->accept, cp );
+libhttpd.c:2138:		if ( hc->accepte[0] != '\0' )
+libhttpd.c:2140:		    if ( strlen( hc->accepte ) > 5000 )
+libhttpd.c:2144:			    httpd_ntoa( &hc->client_addr ) );
+libhttpd.c:2148:			&hc->accepte, &hc->maxaccepte,
+libhttpd.c:2149:			strlen( hc->accepte ) + 2 + strlen( cp ) );
+libhttpd.c:2150:		    (void) strcat( hc->accepte, ", " );
+libhttpd.c:2154:			&hc->accepte, &hc->maxaccepte, strlen( cp ) );
+libhttpd.c:2155:		(void) strcpy( hc->accepte, cp );
+libhttpd.c:2161:		hc->acceptl = cp;
+libhttpd.c:2166:		hc->if_modified_since = tdate_parse( cp );
+libhttpd.c:2167:		if ( hc->if_modified_since == (time_t) -1 )
+libhttpd.c:2174:		hc->cookie = cp;
+libhttpd.c:2189:			    hc->got_range = 1;
+libhttpd.c:2190:			    hc->first_byte_index = atoll( cp + 1 );
+libhttpd.c:2191:			    if ( hc->first_byte_index < 0 )
+libhttpd.c:2192:				hc->first_byte_index = 0;
+libhttpd.c:2195:				hc->last_byte_index = atoll( cp_dash + 1 );
+libhttpd.c:2196:				if ( hc->last_byte_index < 0 )
+libhttpd.c:2197:				    hc->last_byte_index = -1;
+libhttpd.c:2207:		hc->range_if = tdate_parse( cp );
+libhttpd.c:2208:		if ( hc->range_if == (time_t) -1 )
+libhttpd.c:2215:		hc->contenttype = cp;
+libhttpd.c:2220:		hc->contentlength = atol( cp );
+libhttpd.c:2226:		hc->authorization = cp;
+libhttpd.c:2233:		    hc->keep_alive = 1;
+libhttpd.c:2239://		inet_aton( cp, &(hc->client_addr.sa_in.sin_addr) );
+libhttpd.c:2240:		hc->forwardedfor=cp;
+libhttpd.c:2279:    if ( hc->one_one )
+libhttpd.c:2282:	if ( hc->reqhost[0] == '\0' && hc->hdrhost[0] == '\0' )
+libhttpd.c:2294:	if ( hc->keep_alive )
+libhttpd.c:2295:	    hc->should_linger = 1;
+libhttpd.c:2304:	&hc->expnfilename, &hc->maxexpnfilename, strlen( hc->origfilename ) );
+libhttpd.c:2305:    (void) strcpy( hc->expnfilename, hc->origfilename );
+libhttpd.c:2308:    if ( hc->expnfilename[0] == '~' )
+libhttpd.c:2313:	    httpd_send_err( hc, 404, err404title, "", err404form, hc->encodedurl );
+libhttpd.c:2320:	    httpd_send_err( hc, 404, err404title, "", err404form, hc->encodedurl );
+libhttpd.c:2327:    if ( hc->hs->vhost )
+libhttpd.c:2330:	    httpd_send_err( hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:2337:    cp = expand_symlinks( hc->expnfilename, &pi, hc->hs->no_symlink_check, hc->tildemapped );
+libhttpd.c:2340:	httpd_send_err( hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:2343:    httpd_realloc_str( &hc->expnfilename, &hc->maxexpnfilename, strlen( cp ) );
+libhttpd.c:2344:    (void) strcpy( hc->expnfilename, cp );
+libhttpd.c:2345:    httpd_realloc_str( &hc->pathinfo, &hc->maxpathinfo, strlen( pi ) );
+libhttpd.c:2346:    (void) strcpy( hc->pathinfo, pi );
+libhttpd.c:2349:    if ( hc->pathinfo[0] != '\0' )
+libhttpd.c:2352:	i = strlen( hc->origfilename ) - strlen( hc->pathinfo );
+libhttpd.c:2353:	if ( i > 0 && strcmp( &hc->origfilename[i], hc->pathinfo ) == 0 )
+libhttpd.c:2354:	    hc->origfilename[i - 1] = '\0';
+libhttpd.c:2360:    if ( hc->expnfilename[0] == '/' )
+libhttpd.c:2363:		 hc->expnfilename, hc->hs->cwd, strlen( hc->hs->cwd ) ) == 0 )
+libhttpd.c:2367:		hc->expnfilename, &hc->expnfilename[strlen( hc->hs->cwd )] );
+libhttpd.c:2370:	else if ( hc->altdir[0] != '\0' &&
+libhttpd.c:2372:		       hc->expnfilename, hc->altdir,
+libhttpd.c:2373:		       strlen( hc->altdir ) ) == 0 &&
+libhttpd.c:2374:		    ( hc->expnfilename[strlen( hc->altdir )] == '\0' ||
+libhttpd.c:2375:		      hc->expnfilename[strlen( hc->altdir )] == '/' ) ) )
+libhttpd.c:2382:		httpd_ntoa( &hc->client_addr ), hc->encodedurl );
+libhttpd.c:2386:		hc->encodedurl );
+libhttpd.c:2401:    for ( i = hc->checked_idx; hc->checked_idx < hc->read_idx; ++hc->checked_idx )
+libhttpd.c:2403:	c = hc->read_buf[hc->checked_idx];
+libhttpd.c:2406:	    hc->read_buf[hc->checked_idx] = '\0';
+libhttpd.c:2407:	    ++hc->checked_idx;
+libhttpd.c:2408:	    if ( c == '\015' && hc->checked_idx < hc->read_idx &&
+libhttpd.c:2409:		 hc->read_buf[hc->checked_idx] == '\012' )
+libhttpd.c:2411:		hc->read_buf[hc->checked_idx] = '\0';
+libhttpd.c:2412:		++hc->checked_idx;
+libhttpd.c:2414:	    return &(hc->read_buf[i]);
+libhttpd.c:2473:    if ( hc->file_address != (char*) 0 )
+libhttpd.c:2475:	mmc_unmap( hc->file_address, &(hc->sb), nowP );
+libhttpd.c:2476:	hc->file_address = (char*) 0;
+libhttpd.c:2478:    if ( hc->conn_fd >= 0 )
+libhttpd.c:2480:	(void) close( hc->conn_fd );
+libhttpd.c:2481:	hc->conn_fd = -1;
+libhttpd.c:2488:    if ( hc->initialized )
+libhttpd.c:2490:	free( (void*) hc->read_buf );
+libhttpd.c:2491:	free( (void*) hc->decodedurl );
+libhttpd.c:2492:	free( (void*) hc->origfilename );
+libhttpd.c:2493:	free( (void*) hc->expnfilename );
+libhttpd.c:2494:	free( (void*) hc->encodings );
+libhttpd.c:2495:	free( (void*) hc->pathinfo );
+libhttpd.c:2496:	free( (void*) hc->query );
+libhttpd.c:2497:	free( (void*) hc->accept );
+libhttpd.c:2498:	free( (void*) hc->accepte );
+libhttpd.c:2499:	free( (void*) hc->reqhost );
+libhttpd.c:2500:	free( (void*) hc->hostdir );
+libhttpd.c:2501:	free( (void*) hc->remoteuser );
+libhttpd.c:2502:	free( (void*) hc->response );
+libhttpd.c:2504:	free( (void*) hc->altdir );
+libhttpd.c:2506:	hc->initialized = 0;
+libhttpd.c:2580:    for ( prev_dot = &hc->expnfilename[strlen(hc->expnfilename)]; ; prev_dot = dot )
+libhttpd.c:2582:	for ( dot = prev_dot - 1; dot >= hc->expnfilename && *dot != '.'; --dot )
+libhttpd.c:2584:	if ( dot < hc->expnfilename )
+libhttpd.c:2589:	    hc->type = default_type;
+libhttpd.c:2633:		hc->type = typ_tab[mid].val;
+libhttpd.c:2637:    hc->type = default_type;
+libhttpd.c:2642:    hc->encodings[0] = '\0';
+libhttpd.c:2647:	    &hc->encodings, &hc->maxencodings,
+libhttpd.c:2649:	if ( hc->encodings[0] != '\0' )
+libhttpd.c:2651:	    (void) strcpy( &hc->encodings[encodings_len], "," );
+libhttpd.c:2654:	(void) strcpy( &hc->encodings[encodings_len], enc_tab[me_indexes[i]].val );
+libhttpd.c:2733:    dirp = opendir( hc->expnfilename );
+libhttpd.c:2736:	syslog( LOG_ERR, "opendir %.80s - %m", hc->expnfilename );
+libhttpd.c:2737:	httpd_send_err( hc, 404, err404title, "", err404form, hc->encodedurl );
+libhttpd.c:2741:    if ( hc->method == METHOD_HEAD )
+libhttpd.c:2746:	    hc->sb.st_mtime );
+libhttpd.c:2748:    else if ( hc->method == METHOD_GET )
+libhttpd.c:2750:	if ( hc->hs->cgi_limit != 0 && hc->hs->cgi_count >= hc->hs->cgi_limit )
+libhttpd.c:2755:		hc->encodedurl );
+libhttpd.c:2758:	++hc->hs->cgi_count;
+libhttpd.c:2765:		hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:2772:	    httpd_unlisten( hc->hs );
+libhttpd.c:2775:		(off_t) -1, hc->sb.st_mtime );
+libhttpd.c:2788:	    fp = fdopen( hc->conn_fd, "w" );
+libhttpd.c:2793:		    hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:2816:		hc->encodedurl, hc->encodedurl );
+libhttpd.c:2859:		    strlen( hc->expnfilename ) + 1 + strlen( nameptrs[i] ) );
+libhttpd.c:2862:		    strlen( hc->origfilename ) + 1 + strlen( nameptrs[i] ) );
+libhttpd.c:2863:		if ( hc->expnfilename[0] == '\0' ||
+libhttpd.c:2864:		     strcmp( hc->expnfilename, "." ) == 0 )
+libhttpd.c:2872:			"%s/%s", hc->expnfilename, nameptrs[i] );
+libhttpd.c:2873:		    if ( strcmp( hc->origfilename, "." ) == 0 )
+libhttpd.c:2878:			    "%s%s", hc->origfilename, nameptrs[i] );
+libhttpd.c:2976:	syslog( LOG_DEBUG, "spawned indexing process %d for directory '%.200s'", r, hc->expnfilename );
+libhttpd.c:2986:	hc->status = 200;
+libhttpd.c:2987:	hc->bytes_sent = CGI_BYTECOUNT;
+libhttpd.c:2988:	hc->should_linger = 0;
+libhttpd.c:2994:	    hc, 501, err501title, "", err501form, httpd_method_str( hc->method ) );
+libhttpd.c:3061:    if ( hc->hs->vhost && hc->hostname != (char*) 0 && hc->hostname[0] != '\0' )
+libhttpd.c:3062:	cp = hc->hostname;
+libhttpd.c:3063:    else if ( hc->hdrhost != (char*) 0 && hc->hdrhost[0] != '\0' )
+libhttpd.c:3064:	cp = hc->hdrhost;
+libhttpd.c:3065:    else if ( hc->reqhost != (char*) 0 && hc->reqhost[0] != '\0' )
+libhttpd.c:3066:	cp = hc->reqhost;
+libhttpd.c:3068:	cp = hc->hs->server_hostname;
+libhttpd.c:3072:    envp[envn++] = build_env("SERVER_PROTOCOL=%s", hc->protocol);
+libhttpd.c:3073:    (void) my_snprintf( buf, sizeof(buf), "%d", (int) hc->hs->port );
+libhttpd.c:3076:	"REQUEST_METHOD=%s", httpd_method_str( hc->method ) );
+libhttpd.c:3077:    if ( hc->pathinfo[0] != '\0' )
+libhttpd.c:3081:	envp[envn++] = build_env( "PATH_INFO=/%s", hc->pathinfo );
+libhttpd.c:3082:	l = strlen( hc->hs->cwd ) + strlen( hc->pathinfo ) + 1;
+libhttpd.c:3086:	    (void) my_snprintf( cp2, l, "%s%s", hc->hs->cwd, hc->pathinfo );
+libhttpd.c:3091:	"SCRIPT_NAME=/%s", strcmp( hc->origfilename, "." ) == 0 ?
+libhttpd.c:3092:	"" : hc->origfilename );
+libhttpd.c:3093:    if ( hc->query[0] != '\0')
+libhttpd.c:3094:	envp[envn++] = build_env( "QUERY_STRING=%s", hc->query );
+libhttpd.c:3096:	"REMOTE_ADDR=%s", httpd_ntoa( &hc->client_addr ) );
+libhttpd.c:3097:    if ( hc->referrer[0] != '\0' )
+libhttpd.c:3099:	envp[envn++] = build_env( "HTTP_REFERER=%s", hc->referrer );
+libhttpd.c:3100:	envp[envn++] = build_env( "HTTP_REFERRER=%s", hc->referrer );
+libhttpd.c:3102:    if ( hc->useragent[0] != '\0' )
+libhttpd.c:3103:	envp[envn++] = build_env( "HTTP_USER_AGENT=%s", hc->useragent );
+libhttpd.c:3104:    if ( hc->accept[0] != '\0' )
+libhttpd.c:3105:	envp[envn++] = build_env( "HTTP_ACCEPT=%s", hc->accept );
+libhttpd.c:3106:    if ( hc->accepte[0] != '\0' )
+libhttpd.c:3107:	envp[envn++] = build_env( "HTTP_ACCEPT_ENCODING=%s", hc->accepte );
+libhttpd.c:3108:    if ( hc->acceptl[0] != '\0' )
+libhttpd.c:3109:	envp[envn++] = build_env( "HTTP_ACCEPT_LANGUAGE=%s", hc->acceptl );
+libhttpd.c:3110:    if ( hc->cookie[0] != '\0' )
+libhttpd.c:3111:	envp[envn++] = build_env( "HTTP_COOKIE=%s", hc->cookie );
+libhttpd.c:3112:    if ( hc->contenttype[0] != '\0' )
+libhttpd.c:3113:	envp[envn++] = build_env( "CONTENT_TYPE=%s", hc->contenttype );
+libhttpd.c:3114:    if ( hc->hdrhost[0] != '\0' )
+libhttpd.c:3115:	envp[envn++] = build_env( "HTTP_HOST=%s", hc->hdrhost );
+libhttpd.c:3116:    if ( hc->contentlength != -1 )
+libhttpd.c:3119:	    buf, sizeof(buf), "%lu", (unsigned long) hc->contentlength );
+libhttpd.c:3122:    if ( hc->remoteuser[0] != '\0' )
+libhttpd.c:3123:	envp[envn++] = build_env( "REMOTE_USER=%s", hc->remoteuser );
+libhttpd.c:3124:    if ( hc->authorization[0] != '\0' )
+libhttpd.c:3127:    if ( hc->forwardedfor[0] != '\0' )
+libhttpd.c:3128:	envp[envn++] = build_env( "HTTP_X_FORWARDED_FOR=%s", hc->forwardedfor );
+libhttpd.c:3131:    envp[envn++] = build_env( "CGI_PATTERN=%s", hc->hs->cgi_pattern );
+libhttpd.c:3140:** scribble on hc->query.
+libhttpd.c:3154:    argp = NEW( char*, strlen( hc->query ) + 2 );
+libhttpd.c:3158:    argp[0] = strrchr( hc->expnfilename, '/' );
+libhttpd.c:3162:	argp[0] = hc->expnfilename;
+libhttpd.c:3170:    if ( strchr( hc->query, '=' ) == (char*) 0 )
+libhttpd.c:3172:	for ( cp1 = cp2 = hc->query; *cp2 != '\0'; ++cp2 )
+libhttpd.c:3207:    c = hc->read_idx - hc->checked_idx;
+libhttpd.c:3210:	if ( httpd_write_fully( wfd, &(hc->read_buf[hc->checked_idx]), c ) != c )
+libhttpd.c:3213:    while ( c < hc->contentlength )
+libhttpd.c:3215:	r = read( hc->conn_fd, buf, MIN( sizeof(buf), hc->contentlength - c ) );
+libhttpd.c:3248:	httpd_set_ndelay( hc->conn_fd );
+libhttpd.c:3250:    (void) read( hc->conn_fd, buf, sizeof(buf) );
+libhttpd.c:3276:    httpd_clear_ndelay( hc->conn_fd );
+libhttpd.c:3352:    (void) httpd_write_fully( hc->conn_fd, buf, strlen( buf ) );
+libhttpd.c:3355:    (void) httpd_write_fully( hc->conn_fd, headers, headers_len );
+libhttpd.c:3368:	if ( httpd_write_fully( hc->conn_fd, buf, r ) != r )
+libhttpd.c:3371:    shutdown( hc->conn_fd, SHUT_WR );
+libhttpd.c:3392:    (void) fcntl( hc->conn_fd, F_SETFD, 0 );
+libhttpd.c:3409:    if ( hc->conn_fd == STDIN_FILENO || hc->conn_fd == STDOUT_FILENO || hc->conn_fd == STDERR_FILENO )
+libhttpd.c:3411:	int newfd = dup2( hc->conn_fd, STDERR_FILENO + 1 );
+libhttpd.c:3413:	    hc->conn_fd = newfd;
+libhttpd.c:3429:    if ( hc->method == METHOD_POST && hc->read_idx > hc->checked_idx )
+libhttpd.c:3436:	    httpd_send_err( hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:3444:	    httpd_send_err( hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:3467:	if ( hc->conn_fd != STDIN_FILENO )
+libhttpd.c:3468:	    (void) dup2( hc->conn_fd, STDIN_FILENO );
+libhttpd.c:3474:    if ( strncmp( argp[0], "nph-", 4 ) != 0 && hc->mime_flag )
+libhttpd.c:3481:	    httpd_send_err( hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:3489:	    httpd_send_err( hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:3513:	if ( hc->conn_fd != STDOUT_FILENO )
+libhttpd.c:3514:	    (void) dup2( hc->conn_fd, STDOUT_FILENO );
+libhttpd.c:3515:	if ( hc->conn_fd != STDERR_FILENO )
+libhttpd.c:3516:	    (void) dup2( hc->conn_fd, STDERR_FILENO );
+libhttpd.c:3519:    /* At this point we would like to set close-on-exec again for hc->conn_fd
+libhttpd.c:3530:    /* (void) fcntl( hc->conn_fd, F_SETFD, 1 ); */
+libhttpd.c:3541:    directory = strdup( hc->expnfilename );
+libhttpd.c:3543:	binary = hc->expnfilename;      /* ignore errors */
+libhttpd.c:3548:	    binary = hc->expnfilename;
+libhttpd.c:3567:    syslog( LOG_ERR, "execve %.80s - %m", hc->expnfilename );
+libhttpd.c:3568:    httpd_send_err( hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:3580:    if ( hc->method == METHOD_GET || hc->method == METHOD_POST )
+libhttpd.c:3582:	if ( hc->hs->cgi_limit != 0 && hc->hs->cgi_count >= hc->hs->cgi_limit )
+libhttpd.c:3586:		hc->encodedurl );
+libhttpd.c:3589:	++hc->hs->cgi_count;
+libhttpd.c:3590:	httpd_clear_ndelay( hc->conn_fd );
+libhttpd.c:3596:		hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:3603:	    httpd_unlisten( hc->hs );
+libhttpd.c:3608:	syslog( LOG_DEBUG, "spawned CGI process %d for file '%.200s'", r, hc->expnfilename );
+libhttpd.c:3618:	hc->status = 200;
+libhttpd.c:3619:	hc->bytes_sent = CGI_BYTECOUNT;
+libhttpd.c:3620:	hc->should_linger = 0;
+libhttpd.c:3625:	    hc, 501, err501title, "", err501form, httpd_method_str( hc->method ) );
+libhttpd.c:3648:    expnlen = strlen( hc->expnfilename );
+libhttpd.c:3650:    if ( hc->method != METHOD_GET && hc->method != METHOD_HEAD &&
+libhttpd.c:3651:	 hc->method != METHOD_POST )
+libhttpd.c:3654:	    hc, 501, err501title, "", err501form, httpd_method_str( hc->method ) );
+libhttpd.c:3659:    if ( stat( hc->expnfilename, &hc->sb ) < 0 )
+libhttpd.c:3661:	httpd_send_err( hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:3670:    if ( ! ( hc->sb.st_mode & ( S_IROTH | S_IXOTH ) ) )
+libhttpd.c:3675:	    httpd_ntoa( &hc->client_addr ), hc->encodedurl );
+libhttpd.c:3679:	    hc->encodedurl );
+libhttpd.c:3684:    if ( S_ISDIR(hc->sb.st_mode) )
+libhttpd.c:3687:	if ( hc->pathinfo[0] != '\0' )
+libhttpd.c:3689:	    httpd_send_err( hc, 404, err404title, "", err404form, hc->encodedurl );
+libhttpd.c:3697:	if ( strcmp( hc->origfilename, "" ) != 0 &&
+libhttpd.c:3698:	     strcmp( hc->origfilename, "." ) != 0 &&
+libhttpd.c:3699:	     hc->origfilename[strlen( hc->origfilename ) - 1] != '/' )
+libhttpd.c:3711:	    (void) strcpy( indexname, hc->expnfilename );
+libhttpd.c:3718:	    if ( stat( indexname, &hc->sb ) >= 0 )
+libhttpd.c:3725:	if ( ! ( hc->sb.st_mode & S_IROTH ) )
+libhttpd.c:3730:		httpd_ntoa( &hc->client_addr ), hc->encodedurl );
+libhttpd.c:3734:		hc->encodedurl );
+libhttpd.c:3739:	if ( auth_check( hc, hc->expnfilename ) == -1 )
+libhttpd.c:3750:	    httpd_ntoa( &hc->client_addr ), hc->encodedurl );
+libhttpd.c:3754:	    hc->encodedurl );
+libhttpd.c:3762:	cp = expand_symlinks( indexname, &pi, hc->hs->no_symlink_check, hc->tildemapped );
+libhttpd.c:3765:	    httpd_send_err( hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:3769:	httpd_realloc_str( &hc->expnfilename, &hc->maxexpnfilename, expnlen );
+libhttpd.c:3770:	(void) strcpy( hc->expnfilename, cp );
+libhttpd.c:3773:	if ( ! ( hc->sb.st_mode & ( S_IROTH | S_IXOTH ) ) )
+libhttpd.c:3778:		httpd_ntoa( &hc->client_addr ), hc->encodedurl );
+libhttpd.c:3782:		hc->encodedurl );
+libhttpd.c:3790:    (void) strcpy( dirname, hc->expnfilename );
+libhttpd.c:3802:	if ( strcmp( hc->expnfilename, AUTH_FILE ) == 0 )
+libhttpd.c:3807:		httpd_ntoa( &hc->client_addr ), hc->encodedurl );
+libhttpd.c:3811:		hc->encodedurl );
+libhttpd.c:3816:	      strcmp( &(hc->expnfilename[expnlen - sizeof(AUTH_FILE) + 1]), AUTH_FILE ) == 0 &&
+libhttpd.c:3817:	      hc->expnfilename[expnlen - sizeof(AUTH_FILE)] == '/' )
+libhttpd.c:3822:	    httpd_ntoa( &hc->client_addr ), hc->encodedurl );
+libhttpd.c:3826:	    hc->encodedurl );
+libhttpd.c:3836:    if ( hc->hs->cgi_pattern != (char*) 0 &&
+libhttpd.c:3837:	 ( hc->sb.st_mode & S_IXOTH ) &&
+libhttpd.c:3838:	 match( hc->hs->cgi_pattern, hc->expnfilename ) )
+libhttpd.c:3845:    if ( hc->sb.st_mode & S_IXOTH )
+libhttpd.c:3849:	    httpd_ntoa( &hc->client_addr ), hc->encodedurl );
+libhttpd.c:3853:	    hc->encodedurl );
+libhttpd.c:3856:    if ( hc->pathinfo[0] != '\0' )
+libhttpd.c:3860:	    httpd_ntoa( &hc->client_addr ), hc->encodedurl );
+libhttpd.c:3864:	    hc->encodedurl );
+libhttpd.c:3869:    if ( hc->got_range &&
+libhttpd.c:3870:	 ( hc->last_byte_index == -1 || hc->last_byte_index >= hc->sb.st_size ) )
+libhttpd.c:3871:	hc->last_byte_index = hc->sb.st_size - 1;
+libhttpd.c:3875:    if ( hc->method == METHOD_HEAD )
+libhttpd.c:3878:	    hc, 200, ok200title, hc->encodings, "", hc->type, hc->sb.st_size,
+libhttpd.c:3879:	    hc->sb.st_mtime );
+libhttpd.c:3881:    else if ( hc->if_modified_since != (time_t) -1 &&
+libhttpd.c:3882:	 hc->if_modified_since >= hc->sb.st_mtime )
+libhttpd.c:3885:	    hc, 304, err304title, hc->encodings, "", hc->type, (off_t) -1,
+libhttpd.c:3886:	    hc->sb.st_mtime );
+libhttpd.c:3890:	hc->file_address = mmc_map( hc->expnfilename, &(hc->sb), nowP );
+libhttpd.c:3891:	if ( hc->file_address == (char*) 0 )
+libhttpd.c:3893:	    httpd_send_err( hc, 500, err500title, "", err500form, hc->encodedurl );
+libhttpd.c:3897:	    hc, 200, ok200title, hc->encodings, "", hc->type, hc->sb.st_size,
+libhttpd.c:3898:	    hc->sb.st_mtime );
+libhttpd.c:3926:    if ( hc->hs->no_log )
+libhttpd.c:3936:    if ( hc->remoteuser[0] != '\0' )
+libhttpd.c:3937:	ru = hc->remoteuser;
+libhttpd.c:3945:    if ( hc->forwardedfor[0] != '\0' ) {
+libhttpd.c:3946:	rfc1413 = hc->forwardedfor;
+libhttpd.c:3947:	rfc1413 += strcspn( hc->forwardedfor, " \t," );
+libhttpd.c:3952:	rfc1413 = hc->forwardedfor;
+libhttpd.c:3954:    if ( hc->forwardedfor[0] == '\0' )
+libhttpd.c:3959:    (void) snprintf( url, sizeof(url),"%.200s", hc->encodedurl );
+libhttpd.c:3965:    if ( hc->hs->vhost && ! hc->tildemapped )
+libhttpd.c:3968:	    hc->hostname == (char*) 0 ? hc->hs->server_hostname : hc->hostname,
+libhttpd.c:3969:	    hc->encodedurl );
+libhttpd.c:3972:	    "%.200s", hc->encodedurl );
+libhttpd.c:3975:    if ( hc->bytes_sent >= 0 )
+libhttpd.c:3977:	    bytes, sizeof(bytes), "%lld", (long long) hc->bytes_sent );
+libhttpd.c:3982:    if ( hc->hs->logfp != (FILE*) 0 )
+libhttpd.c:4021:	(void) fprintf( hc->hs->logfp,
+libhttpd.c:4023:		hc->client_addr, rfc1413, ru, date, httpd_method_str( hc->method ),
+libhttpd.c:4024:		hc->hostdir, url, hc->protocol,
+libhttpd.c:4025:		status, bytes, hc->referer, hc->useragent );
+libhttpd.c:4028:	(void) fprintf( hc->hs->logfp,
+libhttpd.c:4030:	    httpd_ntoa( &hc->client_addr ), ru, date,
+libhttpd.c:4031:	    httpd_method_str( hc->method ), url, hc->protocol,
+libhttpd.c:4032:	    hc->status, bytes, hc->referrer, hc->useragent );
+libhttpd.c:4035:	(void) fflush( hc->hs->logfp );
+libhttpd.c:4042:		hc->client_addr, rfc1413, ru, httpd_method_str( hc->method ),
+libhttpd.c:4043:		hc->hostdir, url, hc->protocol,
+libhttpd.c:4044:		status, bytes, hc->referer, hc->useragent );
+libhttpd.c:4048:	    httpd_ntoa( &hc->client_addr ), ru,
+libhttpd.c:4049:	    httpd_method_str( hc->method ), url, hc->protocol,
+libhttpd.c:4050:	    hc->status, bytes, hc->referrer, hc->useragent );
+libhttpd.c:4062:    if ( hc->hs->url_pattern == (char*) 0 )
+libhttpd.c:4069:	if ( hc->hs->vhost && hc->hostname != (char*) 0 )
+libhttpd.c:4070:	    cp = hc->hostname;
+libhttpd.c:4072:	    cp = hc->hs->server_hostname;
+libhttpd.c:4077:	    httpd_ntoa( &hc->client_addr ), cp, hc->encodedurl, hc->referrer );
+libhttpd.c:4081:	    hc->encodedurl );
+libhttpd.c:4099:    hs = hc->hs;
+libhttpd.c:4102:    if ( hc->referrer == (char*) 0 || hc->referrer[0] == '\0' ||
+libhttpd.c:4103:	 ( cp1 = strstr( hc->referrer, "//" ) ) == (char*) 0 )
+libhttpd.c:4106:	if ( hs->no_empty_referrers && match( hs->url_pattern, hc->origfilename ) )
+libhttpd.c:4141:	    lp = hc->hostname;
+libhttpd.c:4155:    if ( ! match( lp, refhost ) && match( hs->url_pattern, hc->origfilename ) )
+thttpd.c:801:	    if ( ! fdwatch_check_fd( hc->conn_fd ) )
+thttpd.c:1537:	    c->hc->initialized = 0;
+thttpd.c:1568:	httpd_set_ndelay( c->hc->conn_fd );
+thttpd.c:1570:	fdwatch_add_fd( c->hc->conn_fd, c, FDW_READ );
+thttpd.c:1587:    if ( hc->read_idx >= hc->read_size )
+thttpd.c:1589:	if ( hc->read_size > 5000 )
+thttpd.c:1596:	    &hc->read_buf, &hc->read_size, hc->read_size + 1000 );
+thttpd.c:1601:	hc->conn_fd, &(hc->read_buf[hc->read_idx]),
+thttpd.c:1602:	hc->read_size - hc->read_idx );
+thttpd.c:1623:    hc->read_idx += sz;
+thttpd.c:1648:	    hc, 503, httpd_err503title, "", httpd_err503form, hc->encodedurl );
+thttpd.c:1662:    if ( hc->got_range )
+thttpd.c:1664:	c->next_byte_index = hc->first_byte_index;
+thttpd.c:1665:	c->end_byte_index = hc->last_byte_index + 1;
+thttpd.c:1667:    else if ( hc->bytes_to_send < 0 )
+thttpd.c:1670:	c->end_byte_index = hc->bytes_to_send;
+thttpd.c:1673:    if ( hc->file_address == (char*) 0 )
+thttpd.c:1678:	    throttles[c->tnums[tind]].bytes_since_avg += hc->bytes_sent;
+thttpd.c:1679:	c->next_byte_index = hc->bytes_sent;
+thttpd.c:1696:    fdwatch_del_fd( hc->conn_fd );
+thttpd.c:1697:    fdwatch_add_fd( hc->conn_fd, c, FDW_WRITE );
+thttpd.c:1717:    if ( hc->responselen == 0 )
+thttpd.c:1721:	    hc->conn_fd, &(hc->file_address[c->next_byte_index]),
+thttpd.c:1731:	iv[0].iov_base = hc->response;
+thttpd.c:1732:	iv[0].iov_len = hc->responselen;
+thttpd.c:1733:	iv[1].iov_base = &(hc->file_address[c->next_byte_index]);
+thttpd.c:1735:	sz = writev( hc->conn_fd, iv, 2 );
+thttpd.c:1756:	fdwatch_del_fd( hc->conn_fd );
+thttpd.c:1784:	    syslog( LOG_ERR, "write - %m sending %.80s", hc->encodedurl );
+thttpd.c:1792:    if ( hc->responselen > 0 )
+thttpd.c:1795:	if ( sz < hc->responselen )
+thttpd.c:1798:	    int newlen = hc->responselen - sz;
+thttpd.c:1799:	    (void) memmove( hc->response, &(hc->response[sz]), newlen );
+thttpd.c:1800:	    hc->responselen = newlen;
+thttpd.c:1806:	    sz -= hc->responselen;
+thttpd.c:1807:	    hc->responselen = 0;
+thttpd.c:1812:    c->hc->bytes_sent += sz;
+thttpd.c:1834:	if ( c->hc->bytes_sent / elapsed > c->max_limit )
+thttpd.c:1837:	    fdwatch_del_fd( hc->conn_fd );
+thttpd.c:1841:	    coast = c->hc->bytes_sent / c->max_limit - elapsed;
+thttpd.c:1868:    r = read( c->hc->conn_fd, buf, sizeof(buf) );
+thttpd.c:1886:	if ( match( throttles[tnum].pattern, c->hc->expnfilename ) )
+thttpd.c:2016:	c->hc->should_linger = 0;
+thttpd.c:2018:    if ( c->hc->should_linger )
+thttpd.c:2021:	    fdwatch_del_fd( c->hc->conn_fd );
+thttpd.c:2023:	shutdown( c->hc->conn_fd, SHUT_WR );
+thttpd.c:2024:	fdwatch_add_fd( c->hc->conn_fd, c, FDW_READ );
+thttpd.c:2044:    stats_bytes += c->hc->bytes_sent;
+thttpd.c:2046:	fdwatch_del_fd( c->hc->conn_fd );
+thttpd.c:2077:		    httpd_ntoa( &c->hc->client_addr ) );
+thttpd.c:2089:		    httpd_ntoa( &c->hc->client_addr ) );
+thttpd.c:2108:	fdwatch_add_fd( c->hc->conn_fd, c, FDW_WRITE );

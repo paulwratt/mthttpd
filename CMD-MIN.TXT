@@ -1,0 +1,11 @@
+Here is what I used to start the local service for the XiniX GUI:
+
+ paged -u root -p 8181 -c '**.sh' -h 127.0.0.1 -d /usr/local/www/web.de
+-i /var/run/paged.local.pid -l /var/log/paged_local.log
+
+Note the single quote, not double quotes are necessary around the
+'**.sh' parameter so that the shell does not try to interpret the
+wildcard characters.  Also if you are using an external IP address
+(eg 192.168.1.100), you may want to use "-u nobody" instead, for
+security.
+

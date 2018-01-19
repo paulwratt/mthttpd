@@ -1,0 +1,60 @@
+       mthttpd - modern tiny/turbo/throttling HTTP server
+           based on thttpd version 2.27 of 19Oct2015
+
+mthttpd is a modern version of thttpd HTTP server. It will compile 
+with gcc v4.9 or later, including gcc v6.1.0. It may compile with
+other or older versions too.
+
+mthttpd comes with a _php.cgi_ bounce script that allows any version 
+of PHP to execute php scripts from withn ANY _thttpd_ based server. That 
+script will work with the original _thttpd_ from Jef's acme.com site, 
+as well as _shttpd_ on github.com, and with _paged_ on Xinix OS. It may 
+also work with "premium thttpd" by Sascha Schumann (not tested). It may 
+also with the PHP SAPI patched version 2.21b of thttpd (testing soon).
+
+mthttpd has some minor changes including setting web server user group
+to "www-data" by default, to simplify Apache migration.
+
+To assist with PHP as an executable (.php registered with binfmt_misc)
+and allow better web server development, mthttpd now outputs the PHP 
+specific SCRIPT_FILENAME variable, and for PHP Apache compatability, the 
+DOCUMENT_ROOT and REDIRECT_STATUS variables, directly from web server.
+
+The _php.cgi_ script constructs these variables due to a quirk in the 
+way CGI path overloading is done. However those variables will allow 
+.php executables to be run directly using the "binfmt_misc" method.
+
+Original README:
+
+thttpd is a simple, small, portable, fast, and secure HTTP server.
+
+Simple: It handles only the minimum necessary to implement HTTP/1.1.
+
+Small: See the size comparison chart at
+http://www.acme.com/software/thttpd/notes.html#sizes.  It also has a
+very small run-time size, since it does not fork and is very careful about
+memory allocation.
+
+Portable: It compiles cleanly on FreeBSD 2.x/3.x, SunOS 4.1.x, Solaris 2.x,
+BSD/OS 2.x, Linux 1.2.x, OSF/1 (on a 64-bit Alpha), and no doubt many others.
+
+Fast: In typical use it's about as fast as the best full-featured servers
+(Apache, NCSA, Netscape).  Under extreme load it's much faster.
+
+Secure: It goes to great lengths to protect the web server machine
+against attacks and breakins from other sites.
+
+It also has one extremely useful feature (URL-traffic-based throttling) that
+no other server currently has.
+
+See the manual entry for more details.  See the INSTALL file for
+configuration and installation instructions.  Check the web page
+(http://www.acme.com/software/thttpd/) for updates, or add yourself to
+the mailing list by sending a "subscribe" to thttpd-announce-request@mail.acme.com.
+
+mthttpd Comments to:
+    Paul Wratt     paul.wratt@gmail.com   http://github.com/paulwratt/mthttpd
+
+thttpd Comments to:
+    Jef Poskanzer  jef@mail.acme.com      http://www.acme.com/jef/
+
