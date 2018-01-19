@@ -3,6 +3,9 @@ modern version of thttpd v2.27 (Oct 2015) tiny/turbo/throttling HTTP server by J
 
 For modern compilers, there is also a bug and security fixed v2.25b (Dec 2003) _thttpd_ on github, maintained by Anthony G. Basile blueness@gentoo.org https://github.com/blueness/sthttpd
 
+# patches
+I have added as many missing or applicable patches from Anthony's for of _thttpd_. However the base of this version already has **ol_strcopy()** to replace all the **memmove()** calls, which means some patches are not required any more. I also did not apply the "Clean up free() calls" patch, as I develop for MiNT on Atari ST, sometimes gcc is v2.98, so these are still needed there, at worst they will be compiler warnings, not compiler errors. 
+
 # differences
 _mthttpd_ comes with a _php.cgi_ script and an example _thttpd_ configuration file that will quickly and simply allow ANY version of PHP to be run in its CGI form (eg. php5-cgi) using CGI path overloading. It will also work with any _thttpd_ server version, including "premium thttpd" (not tested). Some PHP applications may break, usually due to assumptions made about environment variables and their contents being made available to PHP. See PHP Manual quote below for an example of CGI path overloading.
 
