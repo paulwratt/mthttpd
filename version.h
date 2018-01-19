@@ -3,8 +3,13 @@
 #ifndef _VERSION_H_
 #define _VERSION_H_
 
+#define SERVER_SOFTWARE "mthttpd 2.27.0b"
+#define SERVER_ADDRESS "http://github.com/paulwratt/mthttpd"
+
+/*
 #define SERVER_SOFTWARE "paged 2017.07.03.0"
 #define SERVER_ADDRESS "http://paged.isource.net.nz/"
+*/
 
 /*
 #define SERVER_SOFTWARE "paged 2016.07.25.0"
