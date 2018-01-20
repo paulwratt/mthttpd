@@ -2352,6 +2352,10 @@ httpd_parse_request( httpd_conn* hc )
     httpd_realloc_str( &hc->pathinfo, &hc->maxpathinfo, strlen( pi ) );
     (void) strcpy( hc->pathinfo, pi );
 
+//    strcat( hc->script_filename, hc->expnfilename ); /* FIXME: need to intelligent pass SCRIPT_FILENAME to PHP CGI */
+//    strcat( hc->script_filename, hc->origfilename ); /* remember that PATH_TRANSLATED = SCRIPT_FILENAME when using */
+                                                       /* CGI path overload, but not when using 'binfmt_misc' method */
+
     /* Remove pathinfo stuff from the original filename too. */
     if ( hc->pathinfo[0] != '\0' )
 	{
