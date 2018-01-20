@@ -2580,7 +2580,9 @@ figure_mime( httpd_conn* hc )
     size_t ext_len, encodings_len;
     int i, top, bot, mid;
     int r;
-    char* default_type = "text/plain; charset=%s";
+    char* default_type = "text/plain; charset=%s";      /* FIXME: use 'file -b -i _full_path_to_file_' */
+                         /* but remember to change to "text/plain; charset=%s" if dumping adir listing */
+                               /* NOTE: the shttpd patch changes default to "application/octet-stream" */
 
     /* Peel off encoding extensions until there aren't any more. */
     n_me_indexes = 0;
