@@ -6,6 +6,12 @@ For modern compilers, there is also a bug and security fixed v2.25b (Dec 2003) _
 # patches
 I have added as many missing or applicable patches from Anthony's for of _thttpd_. However the base of this version already has **ol_strcopy()** to replace all the **memmove()** calls, which means some patches are not required any more. I also did not apply the "Clean up free() calls" patch, as I develop for MiNT on Atari ST, sometimes gcc is v2.98, "free( void() ... )" needed there, so I also keep _configure.in_ and not changeto _configure.ac_ (as Anthony has done with _sthttpd_). At worst they will be compiler warnings, not compiler errors. 
 
+I have not applied the monotonic timer fix. Until I can test the fix with old build systems, I cant afford to change a core component.:
+
+> src/timers.c: Fix monotonic clock support on systems without librt
+
+However it appears monotonic clock was implimented in 2012, so we will see. "old build systems" also _dont_ support _configure.ac_ and _Makefile.ac_ , but "new build systems _do_ support _configure.in_ & _Makefile.in_ still.
+
 # differences
 _mthttpd_ comes with a _php.cgi_ script and an example _thttpd_ configuration file that will quickly and simply allow ANY version of PHP to be run in its CGI form (eg. php5-cgi) using CGI path overloading. It will also work with any _thttpd_ server version, including "premium thttpd" (not tested). Some PHP applications may break, usually due to assumptions made about environment variables and their contents being made available to PHP. See PHP Manual quote below for an example of CGI path overloading.
 
