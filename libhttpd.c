@@ -3143,8 +3143,12 @@ make_envp( httpd_conn* hc )
     if ( hc->remoteuser[0] != '\0' )
 	envp[envn++] = build_env( "REMOTE_USER=%s", hc->remoteuser );
     if ( hc->authorization[0] != '\0' )
+        {
 	envp[envn++] = build_env( "AUTH_TYPE=%s", "Basic" );
 	/* We only support Basic auth at the moment. */
+        envp[envn++] = build_env( "HTTP_AUTHORIZATION=%s", hc->authorization );
+        /* known workaround for Apache & php5-cgi, now it works in thttpd too */
+        }
     if ( hc->forwardedfor[0] != '\0' )
 	envp[envn++] = build_env( "HTTP_X_FORWARDED_FOR=%s", hc->forwardedfor );
     if ( getenv( "TZ" ) != (char*) 0 )
