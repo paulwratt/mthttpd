@@ -1,6 +1,7 @@
 # Generated automatically from Makefile.in by configure.
-# Makefile for cgi-src
+# Makefile for mthttpd/cgi-src
 #
+# Copyright © 2017,2018 by Paul Wratt <paul.wratt@gmail.com>.
 # Copyright © 1995 by Jef Poskanzer <jef@mail.acme.com>.
 # All rights reserved.
 #
@@ -69,6 +70,7 @@ strerror.o:
 
 install:	all
 	-mkdir -p $(CGIBINDIR)
+	-mkdir -p $(MANDIR)/man8
 	rm -f $(CGIBINDIR)/redirect
 	cp redirect $(CGIBINDIR)/redirect
 	rm -f $(MANDIR)/man8/redirect.8

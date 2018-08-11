@@ -1,6 +1,7 @@
 # Generated automatically from Makefile.in by configure.
-# Makefile.in for thttpd
+# Makefile.in for mthttpd
 #
+# Copyright © 2017,2018 by paul Wratt <paul.wratt@gmail.com>.
 # Copyright © 1995,1998 by Jef Poskanzer <jef@mail.acme.com>.
 # All rights reserved.
 #
@@ -154,7 +155,7 @@ tags:
 	ctags -wtd *.c *.h
 
 tar:
-	@name=`sed -n -e '/SERVER_SOFTWARE/!d' -e 's,.*thttpd/,thttpd-,' -e 's, .*,,p' version.h` ; \
+	@name=`sed -n -e '/SERVER_SOFTWARE/!d' -e 's,.*mthttpd/,mthttpd-,' -e 's, .*,,p' version.h` ; \
 	  rm -rf $$name ; \
 	  mkdir $$name ; \
 	  tar cf - `cat FILES` | ( cd $$name ; tar xfBp - ) ; \

@@ -1,5 +1,6 @@
-/* config.h - configuration defines for thttpd and libhttpd
+/* config.h - configuration defines for mthttpd and libhttpd
 **
+** Copyright © 2017,2018 by Paul Wratt <paul.wratt@gmail.com>.
 ** Copyright © 1995,1998,1999,2000,2001 by Jef Poskanzer <jef@mail.acme.com>.
 ** All rights reserved.
 **
@@ -97,14 +98,14 @@
 #define IDLE_SEND_TIMELIMIT 300
 
 /* CONFIGURE: The syslog facility to use.  Using this you can set up your
-** syslog.conf so that all thttpd messages go into a separate file.  Note
+** syslog.conf so that all mthttpd messages go into a separate file.  Note
 ** that even if you use the -l command line flag to send logging to a
 ** file, errors still get sent via syslog.
 */
 #define LOG_FACILITY LOG_DAEMON
 
 /* CONFIGURE: Tilde mapping.  Many URLs use ~username to indicate a
-** user's home directory.  thttpd provides two options for mapping
+** user's home directory.  mthttpd provides two options for mapping
 ** this construct to an actual filename.
 **
 ** 1) Map ~username to <prefix>/username.  This is the recommended choice.
@@ -120,7 +121,7 @@
 ** a security hole.  This is strongly dis-recommended, but it's here because
 ** some people really want it.  Use at your own risk.
 **
-** You can also leave both options undefined, and thttpd will not do
+** You can also leave both options undefined, and mthttpd will not do
 ** anything special about tildes.  Enabling both options is an error.
 */
 #ifdef notdef
@@ -133,11 +134,11 @@
 #endif
 
 /* CONFIGURE: The file to use for authentication.  If this is defined then
-** thttpd checks for this file in the local directory before every fetch.
+** mthttpd checks for this file in the local directory before every fetch.
 ** If the file exists then authentication is done, otherwise the fetch
 ** proceeds as usual.
 **
-** If you undefine this then thttpd will not implement authentication
+** If you undefine this then mthttpd will not implement authentication
 ** at all and will not check for auth files, which saves a bit of CPU time.
 */
 #define AUTH_FILE ".htpasswd"
@@ -154,21 +155,21 @@
 /* Most people won't want to change anything below here. */
 
 /* CONFIGURE: This controls the SERVER_NAME environment variable that gets
-** passed to CGI programs.  By default thttpd does a gethostname(), which
+** passed to CGI programs.  By default mthttpd does a gethostname(), which
 ** gives the host's canonical name.  If you want to always use some other name
 ** you can define it here.
 **
-** Alternately, if you want to run the same thttpd binary on multiple
+** Alternately, if you want to run the same mthttpd binary on multiple
 ** machines, and want to build in alternate names for some or all of
 ** them, you can define a list of canonical name to altername name
-** mappings.  thttpd seatches the list and when it finds a match on
+** mappings.  mthttpd seatches the list and when it finds a match on
 ** the canonical name, that alternate name gets used.  If no match
 ** is found, the canonical name gets used.
 **
-** If both SERVER_NAME and SERVER_NAME_LIST are defined here, thttpd searches
+** If both SERVER_NAME and SERVER_NAME_LIST are defined here, mthttpd searches
 ** the list as above, and if no match is found then SERVER_NAME gets used.
 **
-** In any case, if thttpd is started with the -h flag, that name always
+** In any case, if mthttpd is started with the -h flag, that name always
 ** gets used.
 */
 #ifdef notdef
@@ -182,8 +183,8 @@
 #define SERVER_NAME_LIST ""
 #endif
 
-/* CONFIGURE: Undefine this if you want thttpd to hide its specific version
-** when returning into to browsers.  Instead it'll just say "thttpd" with
+/* CONFIGURE: Undefine this if you want mthttpd to hide its specific version
+** when returning into to browsers.  Instead it'll just say "mthttpd" with
 ** no version.
 */
 #define SHOW_SERVER_VERSION
@@ -209,7 +210,7 @@
 ** virtual hostnames (like, hundreds or thousands), you will want to
 ** enable this feature.  It avoids a problem with most Unix filesystems,
 ** where if there are a whole lot of items in a directory then name lookup
-** becomes very slow.  This feature makes thttpd use subdirectories
+** becomes very slow.  This feature makes mthttpd use subdirectories
 ** based on the first characters of each hostname.  You can set it to use
 ** from one to three characters.  If the hostname starts with "www.", that
 ** part is skipped over.  Dots are also skipped over, and if the name isn't
@@ -231,6 +232,7 @@
 #define VHOST_DIRLEVELS 1
 #define VHOST_DIRLEVELS 2
 #define VHOST_DIRLEVELS 3
+#define VHOST_DIRLEVELS 4
 #endif
 
 /* CONFIGURE: Define this if you want to always use a global passwd file,
@@ -304,15 +306,15 @@
 /* CONFIGURE: The mmap cache tries to keep the total number of mapped
 ** files below this number, so you don't run out of kernel file descriptors.
 ** If you have reconfigured your kernel to have more descriptors, you can
-** raise this and thttpd will keep more maps cached.  However it's not
-** a hard limit, thttpd will go over it if you really are accessing
+** raise this and mthttpd will keep more maps cached.  However it's not
+** a hard limit, mthttpd will go over it if you really are accessing
 ** a whole lot of files.
 */
 #define DESIRED_MAX_MAPPED_FILES 1000
 
 /* CONFIGURE: The mmap cache also tries to keep the total mapped bytes
 ** below this number, so you don't run out of address space.  Again
-** it's not a hard limit, thttpd will go over it if you really are
+** it's not a hard limit, mthttpd will go over it if you really are
 ** accessing a bunch of large files.
 */
 #define DESIRED_MAX_MAPPED_BYTES 1000000000
@@ -335,9 +337,9 @@
 /* CONFIGURE: A list of index filenames to check.  The files are searched
 ** for in this order.
 */
-#define INDEX_NAMES "index.cgi", "index.html", "index.xhtml", "default.cgi", "default.html", "default.xhtml", "auth.sh"
+#define INDEX_NAMES "index.cgi", "index.html", "index.xhtml", "default.cgi", "default.html", "default.xhtml", "default.htm", "auth.sh"
 
-/* CONFIGURE: If this is defined then thttpd will automatically generate
+/* CONFIGURE: If this is defined then mthttpd will automatically generate
 ** index pages for directories that don't have an explicit index file.
 ** If you want to disable this behavior site-wide, perhaps for security
 ** reasons, just undefine this.  Note that you can disable indexing of

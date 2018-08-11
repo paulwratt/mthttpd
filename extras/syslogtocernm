@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# syslogtocern - convert thttpd syslog entries into CERN Combined Log Format
+# syslogtocern - convert mthttpd syslog entries into CERN Combined Log Format
 #
 # Copyright © 1995,1998 by Jef Poskanzer <jef@mail.acme.com>.
 # All rights reserved.
@@ -34,8 +34,8 @@ fi
 tmp1=``mktemp -t stc1.XXXXXX` || { echo "$0: Cannot create temporary file" >&2; exit 1;  }
 trap " [ -f \"$tmp1\" ] && /bin/rm -f -- \"$tmp1\"" 0 1 2 3 13 15
 
-# Gather up all the thttpd entries.
-egrep -h ' thttpd\[' "$@" > $tmp1
+# Gather up all the mthttpd entries.
+egrep -h ' mthttpd\[' "$@" > $tmp1
 
 # Figure out the current year - it's not in syslog's output.  Some versions
 # of date have the %Y directive to give the full four-digit year, but others
@@ -58,11 +58,11 @@ fi
 
 # Do access_log.
 awk < $tmp1 '{if ( NF >= 15 && $7 == "-" && $12 >= 100 && $12 < 510) print;}' |
-  sed -e "s,\([A-Z][a-z][a-z]\) \([0-9 ][0-9]\) \([0-9][0-9]:[0-9][0-9]:[0-9][0-9]\) [^ ]* thttpd\[[0-9]*\]: \([^ ]* [^ ]* [^ ]*\) \(.*\),\4 [\2/\1/${year}:\3] \5," -e 's,\[ ,[0,' > access_log
+  sed -e "s,\([A-Z][a-z][a-z]\) \([0-9 ][0-9]\) \([0-9][0-9]:[0-9][0-9]:[0-9][0-9]\) [^ ]* mthttpd\[[0-9]*\]: \([^ ]* [^ ]* [^ ]*\) \(.*\),\4 [\2/\1/${year}:\3] \5," -e 's,\[ ,[0,' > access_log
 
 # Do error_log.
 awk < $tmp1 '{if ( ! ( NF >= 15 && $7 == "-" && $12 >= 100 && $12 < 510) ) print;}' |
-  sed -e "s,\([A-Z][a-z][a-z] [0-9 ][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]\) [^ ]* thttpd\[[0-9]*\]: \(.*\),[\1 ${year}] \2," > error_log
+  sed -e "s,\([A-Z][a-z][a-z] [0-9 ][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]\) [^ ]* mthttpd\[[0-9]*\]: \(.*\),[\1 ${year}] \2," > error_log
 
 # Done.
 

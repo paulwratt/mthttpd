@@ -35,13 +35,14 @@ http://www.acme.com/test-somefile.html. (Note that the asterisk need not
 be preceded by a slash.)
 .PP
 Note: this is designed for thttpd (http://www.acme.com/software/thttpd/)
-and using it with other web servers may require some hacking.  A possible
+derivitives (including mthttpd, sthttpd and thttpd Premium)
+so using it with other web servers may require some hacking.  A possible
 gotcha is with the symbolic link from the old file pointing at this
-script - servers other than thttpd may not allow that link to be run
-as a CGI program, because they don't check the link to see that it
+script - servers other than thttpd based may not allow that link to be
+run as a CGI program, because they don't check the link to see that it
 points into the allowed CGI directory.
 .SH "SEE ALSO"
-thttpd(8)
+mhttpd(8), sthttpd(8), thttpd(8)
 .SH "BUGS / DEFICIENCIES"
 .PP
 It would be really cool to have this program look for

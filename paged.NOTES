@@ -1,0 +1,44 @@
+https://en.wikipedia.org/wiki/Thttpd			wikipedia article for thttpd
+https://en.wikipedia.org/wiki/Stunnel			wikipedia article for stunnel (useful for implementing ssl with thttpd/paged)
+http://opensource.dyc.edu/sthttpd			homepage for shttpd
+
+https://en.wikipedia.org/wiki/Comparison_of_web_server_software		useful for seeing what functionality web servers have
+https://en.wikipedia.org/wiki/Common_Gateway_Interface			useful for seeing what environment variables are set with web servers
+
+
+
+
+
+
+To get a 'configure' script generated, the following steps needed to be performed:
+
+1) sudo apt-get install autoconf libtool
+2) cd into the root of the staging directory and run 'autoconf'
+
+Additional:
+http://unix.stackexchange.com/questions/18673/some-m4-macros-dont-seem-to-be-defined
+https://bbs.archlinux.org/viewtopic.php?id=161452
+
+
+
+
+
+
+
+
+
+Directories:
+paged.sthttpd	this is the updated thttpd fork that had its 'configure' script fixed, but the binary was 3x the size of stock thttpd without POST processing... we went back to stock...
+paged.temp	this is the original thttpd from ACME that has been configured as paged
+paged.test	this is the patched shttpd code that needs to have its 'configure' script fixed
+paged.unpatched	working source code to get a 'make.sh' script instead of a 'configure' script
+
+
+
+To rebuild the 'configure' script to the sthttpd fork, we had to run the following commands (see https://bbs.archlinux.org/viewtopic.php?id=161452)
+$ vim configure.ac
+$ libtoolize --force
+$ aclocal
+$ autoheader
+$ automake --force-missing --add-missing
+$ autoconf

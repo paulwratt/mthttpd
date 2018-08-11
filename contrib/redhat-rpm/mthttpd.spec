@@ -10,9 +10,9 @@ BuildRoot: /tmp/mthttpd-root
 
 %description
 mthttpd is a modified thttpd v2.27 (+= v2.29) with PHP SAPI extensions.
-thttpd is a very compact no-frills httpd serving daemon that can handle
+mthttpd is a very compact no-frills httpd serving daemon that can handle
 very high loads.  While lacking many of the advanced features of
-Apachee, thttpd operates without forking and is extremely efficient in
+Apachee, mthttpd operates without forking and is extremely efficient in
 memory use.  Basic support for cgi scripts, authentication, and ssi is
 provided for.  Advanced features include the ability to throttle traffic.
 

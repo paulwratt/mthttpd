@@ -1,6 +1,7 @@
 # Generated automatically from Makefile.in by configure.
-# Makefile for extras.
+# Makefile for mthttpd/extras.
 #
+# Copyright © 2017,2018 by Paul Wratt <paul.wratt@gmail.com>.
 # Copyright © 1995,1998 by Jef Poskanzer <jef@mail.acme.com>.
 # All rights reserved.
 #
@@ -67,18 +68,18 @@ htpasswd.o:	htpasswd.c ../config.h
 
 
 install:	all
+	-mkdir -p $(MANDIR)/man1
+	-mkdir -p $(MANDIR)/man8
 	rm -f $(BINDIR)/makeweb $(BINDIR)/htpasswd $(BINDIR)/syslogtocern
 	cp makeweb $(BINDIR)/makeweb
 	chgrp $(WEBGROUP) $(BINDIR)/makeweb
 	chmod 2755 $(BINDIR)/makeweb
 	cp htpasswd $(BINDIR)/htpasswd
 	cp syslogtocern $(BINDIR)/syslogtocern
-	mkdir -p $(MANDIR)/man1
 	rm -f $(MANDIR)/man1/makeweb.1
 	cp makeweb.1 $(MANDIR)/man1/makeweb.1
 	rm -f $(MANDIR)/man1/htpasswd.1
 	cp htpasswd.1 $(MANDIR)/man1/htpasswd.1
-	mkdir -p $(MANDIR)/man8
 	rm -f $(MANDIR)/man8/syslogtocern.8
 	cp syslogtocern.8 $(MANDIR)/man8/syslogtocern.8
 

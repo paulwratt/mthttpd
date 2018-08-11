@@ -1,5 +1,6 @@
 /* libhttpd.c - HTTP protocol library
 **
+** Copyright © 2017,2018 by Paul Wratt <paul.wratt@gmail.com>.
 ** Copyright © 1995,1998,1999,2000,2001,2015 by
 ** Jef Poskanzer <jef@mail.acme.com>. All rights reserved.
 **
@@ -3147,7 +3148,7 @@ make_envp( httpd_conn* hc )
 	envp[envn++] = build_env( "AUTH_TYPE=%s", "Basic" );
 	/* We only support Basic auth at the moment. */
         envp[envn++] = build_env( "HTTP_AUTHORIZATION=%s", hc->authorization );
-        /* known workaround for Apache & php5-cgi, now it works in thttpd too */
+        /* known workaround for Apache & php5-cgi, now it works in m/thttpd too */
         }
     if ( hc->forwardedfor[0] != '\0' )
 	envp[envn++] = build_env( "HTTP_X_FORWARDED_FOR=%s", hc->forwardedfor );

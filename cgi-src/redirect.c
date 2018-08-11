@@ -43,7 +43,8 @@
 **     the redirect program, and that's what you want to use.
 **
 ** Note: this is designed for thttpd (http://www.acme.com/software/thttpd/)
-** and using it with other web servers may require some hacking.  A possible
+** derivitives (including mthttpd, sthttpd and thttpd Premium),
+** so using it with other web servers may require some hacking.  A possible
 ** gotcha is with the symbolic link from the old file pointing at this
 ** script - servers other than thttpd may not allow that link to be run
 ** as a CGI program, because they don't check the link to see that it

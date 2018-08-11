@@ -1,6 +1,6 @@
-.TH syslogtocern 8 "12 October 1995"
+.TH syslogtocernm 8 "12 October 1995"
 .SH NAME
-syslogtocern - convert thttpd syslog entries into CERN Common Log format
+syslogtocern - convert mthttpd syslog entries into CERN Common Log format
 .SH SYNOPSIS
 .B syslogtocern
 .I logfile
@@ -8,13 +8,14 @@ syslogtocern - convert thttpd syslog entries into CERN Common Log format
 .SH DESCRIPTION
 .PP
 Reads one or more syslog files as input.
-Takes the thttpd entries, and converts them into CERN Combined Common
-Log format.
+Takes the thttpd (http://www.acme.com/software/thttpd/)
+derivitives (including mthttpd, sthttpd and thttpd Premium) entries,
+and converts them into CERN Combined Common Log format.
 Produces two files as output: access_log and error_log.
 If files with those names already exist in the current directory, they
 are overwritten.
 .SH "SEE ALSO"
-thttpd(8)
+mhttpd(8), sthttpd(8), thttpd(8)
 .SH "BUGS / DEFICIENCIES"
 Lumps all thttpd processes together.
 It ought to produce separate files for each, identified by IP address and
