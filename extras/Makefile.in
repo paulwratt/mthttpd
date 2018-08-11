@@ -73,10 +73,12 @@ install:	all install-tools
 #	chmod 2755 $(BINDIR)/makeweb
 #	cp htpasswd $(BINDIR)/htpasswd
 #	cp syslogtocern $(BINDIR)/syslogtocern
+#       mkdir -p $(MANDIR)/man1
 #	rm -f $(MANDIR)/man1/makeweb.1
 #	cp makeweb.1 $(MANDIR)/man1/makeweb.1
 #	rm -f $(MANDIR)/man1/htpasswd.1
 #	cp htpasswd.1 $(MANDIR)/man1/htpasswd.1
+#       mkdir -p $(MANDIR)/man8
 #	rm -f $(MANDIR)/man8/syslogtocern.8
 #	cp syslogtocern.8 $(MANDIR)/man8/syslogtocern.8
 
