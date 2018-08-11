@@ -1,0 +1,47 @@
+#!/bin/bash
+# The following two lines enable chkconfig(1) to manipulate this script
+# chkconfig: 2345 99 01
+# description: control modified Jef Poskanzer's tiny/turbo/throttling http daemon
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+pidfile=/var/run/mthttpd.pid
+pid=`cat $pidfile 2>/dev/null`
+
+if test -n "$pid" && kill -0 $pid 2>/dev/null; then
+	dead=no
+else
+	dead=yes
+fi
+
+die(){
+	echo -n "$*"; echo_failure; echo ''
+	exit 1;
+}
+
+case "$1" in
+ start)	test "$dead" = yes || die mthttpd is already running
+	echo -n "Starting mthttpd: "
+	daemon /usr/sbin/mthttpd -C /etc/mthttpd.conf
+	touch /var/lock/subsys/mthttpd
+	echo_success;echo ''
+	exit 0
+	;;
+  stop)	echo -n "Gently shutting down mthttpd: "
+	signal=USR1
+	;;
+  kill)	echo -n "Violently killing mthttpd: "
+	signal=INT
+	;;
+status)	status mthttpd; exit $?;;
+restart) $0 stop; sleep 2; exec $0 start;;
+     *)	die "Usage: mthttpd {start|stop|restart|status}";;
+esac
+
+test "$dead" = no || die mthttpd is not running
+kill -$signal $pid
+sleep 2
+kill -0 $pid 2>/dev/null && die "mthttpd[$pid] will not die"
+rm -f /var/lock/subsys/mthttpd
+echo_success; echo ''

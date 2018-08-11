@@ -1,15 +1,16 @@
-Summary: Throttleable lightweight httpd server
-Name: thttpd
-Version: 2.27
+Summary: Modified Throttleable lightweight httpd server with PHP SAPI
+Name: mthttpd
+Version: 2.27b0
 Release: 1
 Group: Networking
-URL: http://www.acme.com/software/thttpd
-Source0: http://www.acme.com/software/thttpd/thttpd-%{PACKAGE_VERSION}.tar.gz
+URL: http://paulwratt.gothub.io/mthttpd/
+Source0: http://paulwratt.gothub.io/mthttpd/mthttpd-%{PACKAGE_VERSION}.tar.gz
 Copyright: distributable (BSD)
-BuildRoot: /tmp/thttpd-root
+BuildRoot: /tmp/mthttpd-root
 
 %description
-Thttpd is a very compact no-frills httpd serving daemon that can handle
+mthttpd is a modified thttpd v2.27 (+= v2.29) with PHP SAPI extensions.
+thttpd is a very compact no-frills httpd serving daemon that can handle
 very high loads.  While lacking many of the advanced features of
 Apachee, thttpd operates without forking and is extremely efficient in
 memory use.  Basic support for cgi scripts, authentication, and ssi is
@@ -24,7 +25,8 @@ provided for.  Advanced features include the ability to throttle traffic.
 make \
 	WEBDIR=/home/httpd/html \
 	BINDIR=/usr/sbin prefix=/usr \
-	CGIBINDIR=/home/httpd/cgi-bin
+	CGIBINDIR=/home/httpd/cgi-bin \
+        WEBGROUP=www-data
 
 %install
 
@@ -32,8 +34,8 @@ mkdir -p $RPM_BUILD_ROOT/home/httpd/{cgi-bin,logs}
 mkdir -p $RPM_BUILD_ROOT/etc/rc.d/init.d
 mkdir -p $RPM_BUILD_ROOT/usr/man/man{1,8}
 mkdir -p $RPM_BUILD_ROOT/usr/sbin
-install  contrib/redhat-rpm/thttpd.init $RPM_BUILD_ROOT/etc/rc.d/init.d/thttpd
-install  contrib/redhat-rpm/thttpd.conf $RPM_BUILD_ROOT/etc/
+install  contrib/redhat-rpm/mthttpd.init $RPM_BUILD_ROOT/etc/rc.d/init.d/mthttpd
+install  contrib/redhat-rpm/mthttpd.conf $RPM_BUILD_ROOT/etc/
 make -i prefix=$RPM_BUILD_ROOT/usr install
 
 %pre
@@ -42,10 +44,10 @@ grep '^httpd:' /etc/passwd >/dev/null || \
 	/usr/sbin/adduser -r httpd
 
 %post
-/sbin/chkconfig --add thttpd
+/sbin/chkconfig --add mthttpd
 
 %preun
-/sbin/chkconfig --del thttpd
+/sbin/chkconfig --del mthttpd
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -56,13 +58,16 @@ rm -rf $RPM_BUILD_ROOT
 %attr(2755, httpd, httpd) /usr/sbin/makeweb
 /usr/sbin/htpasswd
 /usr/sbin/syslogtocern
-/usr/sbin/thttpd
+/usr/sbin/mthttpd
 %attr(-, httpd, httpd) /home/httpd
-%attr(0755, root, root) /etc/rc.d/init.d/thttpd
-%config /etc/thttpd.conf
+%attr(0755, root, root) /etc/rc.d/init.d/mthttpd
+%config /etc/mthttpd.conf
 %doc /usr/man/man*/*
 
 %changelog
+
+* Mon May 26 2018 Paul Wratt <paul.wratt@gmail.com>
+  - Updated to v2.27b0
 
 * Mon Dec 29 2003 Jef Poskanzer <jef@mail.acme.com>
   - Updated to 2.26
