@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# mthttpd-rotate - nightly script to rotate mthttpd's log files on FreeBSD
+#
+# This goes in /etc/periodic/daily.  It rotates the log files and then
+# tells mthttpd to re-open its log file.
+
+cd /usr/local/www/chroot/logs
+rm -f mthttpd_log.7.gz
+mv mthttpd_log.6.gz mthttpd_log.7.gz
+mv mthttpd_log.5.gz mthttpd_log.6.gz
+mv mthttpd_log.4.gz mthttpd_log.5.gz
+mv mthttpd_log.3.gz mthttpd_log.4.gz
+mv mthttpd_log.2.gz mthttpd_log.3.gz
+mv mthttpd_log.1.gz mthttpd_log.2.gz
+mv mthttpd_log mthttpd_log.1
+kill -HUP `cat /var/run/mthttpd.pid`
+sleep 1
+gzip -f mthttpd_log.1
