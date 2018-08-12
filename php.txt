@@ -1,0 +1,22 @@
+The following works with thttpd, sthttpd and mthttpd and PHP CGI as FastCGI, which is plenty fast enough for even heavy load on a RPi, if all it is doing is serving web pages (1Gb restriction).
+
+ATM the only way to get PHP functioning properly, in such a way that the same code can be used unmodified with Apache or another PHP SAPI web server, is by using CGI "path overloading" and a PHP bounce script that presets a few missing variables, most notably SCRIPT_FILENAME, which although not part of any CGI standard, makes PHP unuable with most CGI web servers (including thttpd) if not set.
+
+This PHP bounce script must also preparse PATH_TRANSLATED when its empty, replacing it with "DOCUMENT_ROOT/index.php", so that SCRIPT_FILENAME gets the correct value (and PHP knows what the hell is going on).
+
+thttpd is a strict CGI/1.1 web server, so it also does not pass along PHP_AUTH_USER or PHP_AUTH_PW. If you are having issues getting this to work with PHP Basic Authentication, you will probably need to provide thttp a .htpasssd which can be generated with the 'htpasswd' tool.
+
+You can use 'mthttpd/www/cgi-bin/php.cgi' where the 'www' would be the web server root, and a test url would be:
+ http://127.0.0.1/cgi-bin/php.cgi/test.php
+
+Note that 'mthttpd/www/test.php' must have executable writes for the same _user_ as the '-u _user' thttpd was started with. This just simplifies security for thttpd, while placing responsibility for who can execute what back on the webserver developer, operator or server admin. The default mthttpd user group is 'www-data' to simplify Apache & NgenX transitions.
+
+CGI "path overloading" simply means "everything in the url after the cgi name is a path from the root of the webserver". With the above example test url, the default thttpd filesystem translation (presented as SCRIPT_FILENAME in the bounce script) would be '/usr/local/www/test.php', and the CGI program would be at '/usr/local/www/cgi-bin/php.cgi', and both would have their executable bit set.
+
+If, for what ever reason, you choose not to have a '/cgi-bin/' folder, you can look a what can be done with the bounce scripts in 'mthttpd/pgp-cgi/*' and the thttpd conf file there.
+
+The last thing the bounce scripts does before passing everything along to PHP, is check the extension, and dump the html, text or download instead.
+
+NOTE: one of the main jobs of mthttpd is to pass common non-CGI standard environment variable, ones that SAPI modules mostly use, eg DOCUMENT_ROOT & SCRIPT_FILENAME.
+
+NOTE: the other main goal of mthttpd is to apply the v2.21 SAPI patch to modern versions of thttpd. This is currently a moot point, because as of late v5.?.? (v6?) the thttpd SAPI code was removed from PHP, because the current developers did not know what thttpd was, or how to enable a SAPI module for it. Plainly they were dickheads, however I did make a patch to reapply it to PHP. ATM Apache is the only PHP SAPI module server.

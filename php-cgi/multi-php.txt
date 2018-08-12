@@ -1,0 +1,11 @@
+In mthttpd it is relatively easy to run PHP from '/usr/bin/php-cgi' with the included script 'mthttpd/www/cgi-bin/php.cgi'. It will even work with thttpd and sthttpd. NOT is uses CGI "path overloading".
+
+But what if you develop, test, compare or backport across different versions of PHP. What if you are reviewing or doing time trials.
+
+If any of the CGI programs from 'mthttpd/php-cgi/*' are placed in the root of the webserver, and a CGI pattern is applied, you can run any number of PHP versions, including sub-versions. As long as all the related binaries and libraries are seperated and locatable from the command line, they all can be used from mthttpd at the same time.
+
+The PHP pattern with execute the first 'php-cgi' in the $PATH. The crucial part for multiple PHP versoins is the CGI pattern. 
+
+ mthttpd -c "/php3|**.php3|/php4|**.php4|/php5|**.php5|/php6|**.php6|/php7|**.php7|/php503|**.php" -d /home/_user_/test/www
+
+NOTE: in order for this to work in a secure way, the PHP script must be marked as executable on the filesystem, becuase you will use CGI "path overloading" and it will check that the actual "script" to be executed has the "executable" bit set for that file, only then will it allow the CGI program to execute that script.

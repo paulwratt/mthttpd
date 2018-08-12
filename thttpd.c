@@ -868,6 +868,11 @@ parse_args( int argc, char** argv )
 #else /* CGI_PATTERN */
     cgi_pattern = (char*) 0;
 #endif /* CGI_PATTERN */
+#ifdef PHP_PATTERN
+    php_pattern = PHP_PATTERN;
+#else /* PHP_PATTERN */
+    php_pattern = (char*) 0;
+#endif /* PHP_PATTERN */
 #ifdef CGI_LIMIT
     cgi_limit = CGI_LIMIT;
 #else /* CGI_LIMIT */
@@ -936,6 +941,11 @@ parse_args( int argc, char** argv )
 	    ++argn;
 	    cgi_pattern = argv[argn];
 	    }
+	else if ( strcmp( argv[argn], "-a" ) == 0 && argn + 1 < argc )
+	    {
+	    ++argn;
+	    php_pattern = argv[argn];
+	    }
 	else if ( strcmp( argv[argn], "-t" ) == 0 && argn + 1 < argc )
 	    {
 	    ++argn;
@@ -993,12 +1003,9 @@ parse_args( int argc, char** argv )
 static void
 usage( void )
     {
-/*
     (void) fprintf( stderr,
-"usage:  %s [-C configfile] [-p port] [-d dir] [-r|-nor] [-dd data_dir] [-s|-nos] [-v|-nov] [-g|-nog] [-u user] [-c cgipat] [-t throttles] [-h host] [-l logfile] [-i pidfile] [-T charset] [-P P3P] [-M maxage] [-V] [-D]\n",
+"usage:  %s [-C configfile] [-p port] [-d dir] [-r|-nor] [-dd data_dir] [-s|-nos] [-v|-nov] [-g|-nog] [-u user] [-c cgipat] [-a phppat] [-t throttles] [-h host] [-l logfile] [-i pidfile] [-T charset] [-P P3P] [-M maxage] [-V] [-D]\n",
 	argv0 );
-*/
-    (void) fprintf( stderr, "usage:  paged [-C configfile] [-p port] [-d dir] [-r|-nor] [-dd data_dir] [-s|-nos] [-v|-nov] [-g|-nog] [-u user] [-c cgipat] [-t throttles] [-h host] [-l logfile] [-i pidfile] [-T charset] [-P P3P] [-M maxage] [-V] [-D]\n" );
     exit( 1 );
     }
 
@@ -2178,7 +2185,7 @@ thttpd_logstats( long secs )
     {
     if ( secs > 0 )
 	syslog( LOG_NOTICE,
-	    "  paged - %ld connections (%g/sec), %d max simultaneous, %lld bytes (%g/sec), %d httpd_conns allocated",
+	    "  mthttpd - %ld connections (%g/sec), %d max simultaneous, %lld bytes (%g/sec), %d httpd_conns allocated",
 	    stats_connections, (float) stats_connections / secs,
 	    stats_simultaneous, (long long) stats_bytes,
 	    (float) stats_bytes / secs, httpd_conn_count );

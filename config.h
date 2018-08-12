@@ -82,11 +82,60 @@
 ** If this many are already running, then attempts to run more will
 ** return an HTTP 503 error.  If this is not defined then there's
 ** no limit (and you'd better have a lot of memory).  This can also be
-** set in the runtime config file.
+** set in the runtime config file. Default 50 is limited for RPi.
+*/
+#define CGI_LIMIT 50
+
+/* CONFIGURE: PHP scripts must match this pattern to get executed.  It's
+** a simple shell-style wildcard pattern, with * meaning any string not
+** containing a slash, ** meaning any string at all, and ? meaning any
+** single character; or multiple such patterns separated by |.  The
+** patterns get checked against the filename part of the incoming URL.
+**
+** Restricting PHP scripts to a single directory lets the site administrator
+** review them for security holes, and is strongly recommended.  If there
+** are individual users that you trust, you can enable their directories too.
+**
+** You can also specify a PHP pattern on the command line, with the -a flag.
+** Such a pattern overrides this compiled-in default.
+**
+** If no PHP pattern is specified, neither here nor on the command line,
+** then PHP scripts cannot be run at all.  If you want to disable PHP
+** as a security measure that's how you do it, just don't define any
+** pattern here and don't run with the -a flag.
+**
+** By using multiple CGI paterns and CGI PHP programs you can run multiple
+** versions of PHP, however using the PHP pattern will only execute the
+** first 'php-cgi' in $PATH. A combination is also possible, and for testing
+** or speed comparison purposes, it is possible to run v5.0.3 & 5.6.33 
 */
 #ifdef notdef
-#define CGI_LIMIT 50
+/* Some sample patterns.  Allow scripts only in one central directory: */
+#define PHP_PATTERN "/wordpress/*"
+/* Allow scriptss in a central directory, or anywhere in a trusted
+** user's tree: */
+#define PHP_PATTERN "/testing/**.php|/jef/**.php4"
+/* Allow any PHP script anywhere ending with a .php: */
+#define PHP_PATTERN "**.php"
+/* When virtual hosting, enable the central directory on every host: */
+#define PHP_PATTERN "/*/php5/**.php5"
 #endif
+
+/* CONFIGURE: How many seconds to allow PHP programs to run before killing
+** them.  This is in case someone writes a PHP program that goes into an
+** infinite loop, or does a massive database lookup that would take hours,
+** or whatever.  If you don't want any limit, comment this out, but that's
+** probably a really bad idea. Default uses standard PHP timeout (60 sec).
+*/
+#define PHP_TIMELIMIT 60
+
+/* CONFIGURE: Maximum number of simultaneous PHP programs allowed.
+** If this many are already running, then attempts to run more will
+** return an HTTP 503 error.  If this is not defined then there's
+** no limit (and you'd better have a lot of memory).  This can also be
+** set in the runtime config file. Default 10 is limited for RPi.
+*/
+#define PHP_LIMIT 10
 
 /* CONFIGURE: How many seconds to allow for reading the initial request
 ** on a new connection.
