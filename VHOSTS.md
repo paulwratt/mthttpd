@@ -26,3 +26,52 @@
     The server's _real_ name is gate.acme.com, and I added symbolic links for its two IP numbers. In addition there are directories for all the virtual hosts I'm serving.
 
 That ought to do it for name-based vhosting. 
+
+
+# On IP aliasing:
+
+If you want to do multi-homing but your OS's ifconfig program doesn't have the alias command, you may still be able to get it to work.
+
+If you're running Solaris 2.3 or later, it's just a matter of a different user-interface on the ifconfig program. The Solaris equivalent of the example in the thttpd man page would be:
+
+```
+        ifconfig le0 www.acme.com
+        ifconfig le0:0 www.acme.com
+        ifconfig le0:1 www.joe.acme.com up
+        ifconfig le0:2 www.jane.acme.com up
+```
+
+Not so hard. Still, it would be nice if Sun got with the program and supported the alias command. Maybe some day.
+
+If you're running IRIX, you can use the PPP driver to add IP aliases. This is complicated but does not require kernel hacking. First you start up PPP commands for the aliased addresses. Sticking once again with the example in the man page:
+
+```
+        /usr/etc/ppp -r 192.100.66.200 &
+        /usr/etc/ppp -r 192.100.66.201 &
+```
+
+These commands will complain that they can't find the address - that's ok, you just need them to start. In fact if you like, you can kill them after they complain. Next you point the aliased addresses at the real one, using `ifconfig`:
+
+```
+        ifconfig ppp0 192.100.66.200 192.100.66.10
+        ifconfig ppp0 192.100.66.201 192.100.66.10
+```
+
+Next you have to tell ARP that all the IP addresses go to the same ethernet address. You will need the ethernet address for you system, which you can get from the `netstat -ia` command - it's the bunch of hex digits separated by colons.
+
+```
+        arp -s 192.100.66.10 08:00:20:09:0e:86 pub
+        arp -s 192.100.66.200 08:00:20:09:0e:86 pub
+        arp -s 192.100.66.201 08:00:20:09:0e:86 pub
+```
+
+Finally, you have to add routes from the new PPP interfaces to localhost:
+
+```
+        route add 192.100.66.200 localhost 1
+        route add 192.100.66.201 localhost 1
+```
+
+If you're running SunOS 4.1.x, fetch this tar file: ftp://ftp.cerf.net/pub/vendor/peggy/vif.tar.gz It contains some netnews articles with instructions and source code for adding a "virtual interface" device to the kernel. Installing this stuff is not trivial. There's also supposedly a way to use a PPP driver under SunOS, as with IRIX above, but I haven't found details on this yet.
+
+If you're running Linux, here's a pointer to some kernel patches to add ip aliasing: ftp://ftp.mindspring.com/users/rsanders/ipalias/ I'm not sure what version of Linux this is for. Recent/future versions of Linux may come with aliasing already installed, so check your ifconfig man page before you start hacking. 
