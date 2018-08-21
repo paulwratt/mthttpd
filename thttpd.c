@@ -1,5 +1,6 @@
-/* thttpd.c - tiny/turbo/throttling HTTP server
+/* thttpd.c - tiny/turbo/throttling HTTP server with PHP SAPI
 **
+** Copyright © 2017,2018 by Paul Wratt <paul.wratt@gmail.com>.
 ** Copyright © 1995,1998,1999,2000,2001,2015 by
 ** Jef Poskanzer <jef@mail.acme.com>. All rights reserved.
 **
@@ -77,6 +78,8 @@ static char* data_dir;
 static int do_chroot, no_log, no_symlink_check, do_vhost, do_global_passwd;
 static char* cgi_pattern;
 static int cgi_limit;
+static char* php_pattern;
+static int php_limit;
 static char* url_pattern;
 static int no_empty_referrers;
 static char* local_pattern;
@@ -341,7 +344,7 @@ re_open_logfile( void )
 	{
 	syslog( LOG_NOTICE, "re-opening logfile" );
 	logfp = fopen( logfile, "a" );
-        retchmod = chmod( logfile, S_IRUSR|S_IWUSR );
+	retchmod = chmod( logfile, S_IRUSR|S_IWUSR );
 	if ( logfp == (FILE*) 0 || retchmod != 0 )
 	    {
 	    syslog( LOG_CRIT, "re-opening %.80s - %m", logfile );
@@ -432,8 +435,8 @@ main( int argc, char** argv )
 	else
 	    {
 	    logfp = fopen( logfile, "a" );
-            retchmod = chmod( logfile, S_IRUSR|S_IWUSR );
-            if ( logfp == (FILE*) 0 || retchmod != 0 )
+	    retchmod = chmod( logfile, S_IRUSR|S_IWUSR );
+	    if ( logfp == (FILE*) 0 || retchmod != 0 )
 		{
 		syslog( LOG_CRIT, "%.80s - %m", logfile );
 		perror( logfile );

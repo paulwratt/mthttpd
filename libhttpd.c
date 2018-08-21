@@ -1218,6 +1218,9 @@ httpd_method_str( int method )
 	case METHOD_GET: return "GET";
 	case METHOD_HEAD: return "HEAD";
 	case METHOD_POST: return "POST";
+	case METHOD_PUT: return "PUT";
+	case METHOD_DELETE: return "DELETE";
+	case METHOD_TRACE: return "TRACE";
 	default: return "UNKNOWN";
 	}
     }
@@ -2037,6 +2040,12 @@ httpd_parse_request( httpd_conn* hc )
 	hc->method = METHOD_HEAD;
     else if ( strcasecmp( method_str, httpd_method_str( METHOD_POST ) ) == 0 )
 	hc->method = METHOD_POST;
+    else if ( strcasecmp( method_str, httpd_method_str( METHOD_PUT ) ) == 0 )
+	hc->method = METHOD_PUT;
+    else if ( strcasecmp( method_str, httpd_method_str( METHOD_DELETE ) ) == 0 )
+	hc->method = METHOD_DELETE;
+    else if ( strcasecmp( method_str, httpd_method_str( METHOD_TRACE ) ) == 0 )
+	hc->method = METHOD_TRACE;
     else
 	{
 	httpd_send_err( hc, 501, err501title, "", err501form, method_str );
@@ -2589,7 +2598,7 @@ figure_mime( httpd_conn* hc )
     int i, top, bot, mid;
     int r;
     char* default_type = "text/plain; charset=%s";      /* FIXME: use 'file -b -i _full_path_to_file_' */
-                         /* but remember to change to "text/plain; charset=%s" if dumping adir listing */
+                        /* but remember to change to "text/html; charset=%s" if dumping a dir listing */
                                /* NOTE: the shttpd patch changes default to "application/octet-stream" */
 
     /* Peel off encoding extensions until there aren't any more. */
